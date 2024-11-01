@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Darbuotojo redagavimas</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:include="fragments/navbar"></div>
+<div class="container">
+
+    <h1>Darbuotojo informacijos redagavimas</h1>
+
+    <form th:action="@{/personnel-list/edit/save/{id}(id=${worker.Tab_nr})}" th:method="post" th:object="${worker}">
+
+        <div th:if="${error}" style="color: red;">
+            <p th:text="${error}"></p>
+        </div>
+
+        <div>
+            <input type="hidden" name="Tab_nr" th:field="*{Tab_nr}" />
+            <label>Vardas: </label><input type="text" name="Name" th:value="${worker.Name}" />
+            <label>Pavardė: </label><input type="text" name="LastName" th:value="${worker.LastName}" />
+            <label>Adresas: </label><input type="text" name="Address" th:value="${worker.Address}" />
+        </div>
+        <button style="border: 2px solid #04AA6D; width:76px;" class="view-button" type="submit">Išsaugoti</button>
+    </form>
+</div>
+</body>
+</html>
