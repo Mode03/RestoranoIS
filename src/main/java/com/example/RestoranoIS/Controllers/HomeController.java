@@ -47,4 +47,15 @@ public class HomeController {
     public String showProfilePage() {
         return "profile";
     }
+
+    @GetMapping("/edit-profile")
+    public String showEditProfilePage() {
+        return "edit-profile";
+    }
+
+    @PostMapping("/edit-profile")
+    public String updateProfile() {
+        // Logika redagavimui
+        return "redirect:/edit-profile";
+    }
 }

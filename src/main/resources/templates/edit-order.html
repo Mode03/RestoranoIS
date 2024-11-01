@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Užsakymo Redagavimas</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div th:replace="fragments/navbar"></div>
+<h2>Užsakymo Redagavimas</h2>
+<form action="/edit-order" method="post">
+    <label for="username">Klientas:</label>
+    <input type="text" id="username" name="username" required value="Vardenis">
+    <label for="date">Data:</label>
+    <input type="date" id="date" name="date" required>
+    <label for="payment">Mokejimo metodas:</label>
+    <input type="number" id="payment" name="payment" required value="15.56">
+    <label for="status">Užsakymo būsena:</label>
+    <input type="text" id="status" name="status" required value="Vykdoma">
+    <button type="submit">Išsaugoti</button>
+</form>
+</body>
+</html>

@@ -47,6 +47,16 @@ form label {
     font-weight: bold;
 }
 
+form input[type="text"],
+form input[type="password"],
+form input[type="email"] {
+    width: 95%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
 form button {
     width: 100%;
     padding: 10px;
@@ -59,4 +69,73 @@ form button {
 
 form button:hover {
     background-color: #555;
+}
+
+/* Lentelės stilius */
+table {
+    width: 90%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #333;
+    color: white;
+}
+
+.container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.edit-order {
+    text-align: center;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+}
+
+.center-actions {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.delete-button {
+    padding: 10px 20px;
+    background-color: #d9534f;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.delete-button:hover {
+    background-color: #c9302c;
+}
+
+.cancel-link {
+    margin-left: 10px;
+    text-decoration: none;
+    color: #333;
+    padding: 10px 20px;
+    background-color: #ddd;
+    border-radius: 4px;
+}
+
+.cancel-link:hover {
+    background-color: #bbb;
 }
