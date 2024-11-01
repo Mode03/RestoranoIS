@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <title>Prisijungimas</title>
+</head>
+<body>
+    <div th:include="fragments/navbar"></div>
+    <h2>Prisijungimo langas</h2>
+    <form action="/login" method="post">
+        <label for="username">Vartotojo vardas:</label>
+        <input type="text" id="username" name="username" required>
+        <label for="password">Slaptažodis:</label>
+        <input type="password" id="password" name="password" required>
+        <br><br>
+        <button type="submit">Prisijungti</button>
+    </form>
+</body>
+</html>
