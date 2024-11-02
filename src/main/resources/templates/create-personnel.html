@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Darbuotojo sukurimas</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:insert="~{fragments/navbar}"></div>
+<div class="container">
+
+    <h1>Darbuotojo sukurimas</h1>
+
+    <form th:action="@{/personnel-list/create/submit}" th:method="post">
+
+        <div th:if="${error}" style="color: red;">
+            <p th:text="${error}"></p>
+        </div>
+
+        <div>
+            <label>Vardas: </label><input type="text" name="Name"/>
+            <label>Pavardė: </label><input type="text" name="LastName"/>
+            <label>Adresas: </label><input type="text" name="Address"/>
+        </div>
+        <button style="border: 2px solid #04AA6D; width:76px;" class="view-button" type="submit">Sukurti</button>
+    </form>
+    <a th:href="@{/personnel-list}">Atgal į sarašą</a>
+</div>
+</body>
+</html>
