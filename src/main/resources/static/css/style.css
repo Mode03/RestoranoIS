@@ -179,3 +179,28 @@ th {
 .report-filters button:hover {
     background-color: #45a049;
 }
+
+/* CIA YRA DEL GRAZAUS TABLE VISKAS. NELIEST */
+.styled-table {
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    min-width: 400px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    width: 60dvw;
+    margin-left:20dvw;
+    border-radius: 20px;
+}
+
+.styled-table td, th{
+    text-align: center;
+}
+
+.view-button, .delete-button, .modify-button{
+  color: black;
+  border-radius:10px;
+  background-color: transparent
+}
+
+/* CIA YRA DEL GRAZAUS TABLE VISKAS. NELIEST */

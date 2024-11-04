@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Darbuotojų sarašas</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:insert="~{fragments/navbar}"></div>
+<div class="container">
+
+    <h1>Darbuotojų sarašas</h1>
+    <table class="styled-table">
+        <thead>
+        <tr>
+            <th>Tab Nr</th>
+            <th>Vardas</th>
+            <th>Pavardė</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="worker : ${workers}">
+            <td th:text="${worker.Tab_nr}"></td>
+            <td th:text="${worker.Name}"></td>
+            <td th:text="${worker.LastName}"></td>
+<!--            <td th:text="${worker.Address}"></td>-->
+            <td>
+                <button th:onclick="|window.location='@{/personnel-list/view/{id}(id=${worker.Tab_nr})}'|" style="border: 2px solid #04AA6D;" class="view-button">Peržiūrėti</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div>
+        <button th:onclick="|window.location='@{/personnel-list/create}'|" style="border: 2px solid #04AA6D;" class="view-button">Sukurti naują personalą</button>
+        <button th:onclick="|window.location='@{/personnel-list/salary}'|" style="border: 2px solid #04AA6D;" class="view-button">Skaičiuoti algas</button>
+        <button th:onclick="|window.location='@{/personnel-list/populate}'|" style="border: 2px solid #04AA6D;" class="view-button">Užpildyti pavyzdiniais duomenimis</button>
+    </div>
+    <div th:if="${info}" style="color: blue;">
+        <p th:text="${info}"></p>
+    </div>
+</div>
+</body>
+</html>
