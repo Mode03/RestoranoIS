@@ -110,7 +110,8 @@ th {
 }
 
 .center-actions {
-    text-align: center;
+    display: flex;
+    justify-content: center;
     margin-top: 20px;
 }
 
@@ -138,4 +139,43 @@ th {
 
 .cancel-link:hover {
     background-color: #bbb;
+}
+
+.report-filters {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.report-filters label {
+    display: block;
+    margin: 10px 0 5px;
+    font-weight: bold;
+}
+
+.report-filters input[type="date"],
+.report-filters select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.report-filters button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.report-filters button:hover {
+    background-color: #45a049;
 }

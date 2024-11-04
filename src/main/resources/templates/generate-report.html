@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ataskaitos Generavimas</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div th:replace="fragments/navbar"></div>
+<h2>Ataskaitos Generavimas</h2>
+
+<div class="report-filters">
+    <form action="/report" method="get">
+        <label for="startDate">Pradžios Data:</label>
+        <input type="date" id="startDate" name="startDate">
+
+        <label for="endDate">Pabaigos Data:</label>
+        <input type="date" id="endDate" name="endDate">
+
+        <label for="paymentMethod">Mokėjimo Metodas:</label>
+        <select id="paymentMethod" name="paymentMethod">
+            <option value="all">Visi</option>
+            <option value="card">Kortelė</option>
+            <option value="cash">Grynais</option>
+            <option value="bank_transfer">Banko pavedimas</option>
+        </select>
+
+        <label for="orderStatus">Užsakymo Būsena:</label>
+        <select id="orderStatus" name="orderStatus">
+            <option value="all">Visos</option>
+            <option value="completed">Įvykdyta</option>
+            <option value="pending">Laukiama</option>
+            <option value="cancelled">Atšaukta</option>
+        </select>
+
+        <button type="submit">Sugeneruoti Ataskaitą</button>
+    </form>
+</div>
+</body>
+</html>

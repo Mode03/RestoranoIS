@@ -34,4 +34,14 @@ public class OrderController {
     public String processDeleteOrder() {
         return "redirect:/orders";
     }
+
+    @GetMapping("/generate-report")
+    public String showGenerateReportPage() {
+        return "generate-report";
+    }
+
+    @GetMapping("/report")
+    public String showReportPage() {
+        return "report";
+    }
 }
