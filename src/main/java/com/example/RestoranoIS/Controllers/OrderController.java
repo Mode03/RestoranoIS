@@ -8,27 +8,27 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class OrderController {
     @GetMapping("orders")
     public String showOrders() {
-        return "orders";
+        return "Orders/orders";
     }
 
     @GetMapping("/view-order")
     public String viewOrder() {
-        return "view-order";
+        return "Orders/view-order";
     }
 
     @GetMapping("/edit-order")
     public String editOrder() {
-        return "edit-order";
+        return "Orders/edit-order";
     }
 
     @PostMapping("/edit-order")
     public String processEditOrder() {
-        return "edit-order";
+        return "Orders/edit-order";
     }
 
     @GetMapping("/delete-order")
     public String deleteOrder() {
-        return "delete-order";
+        return "Orders/delete-order";
     }
     @PostMapping("/delete-order")
     public String processDeleteOrder() {
@@ -37,11 +37,11 @@ public class OrderController {
 
     @GetMapping("/generate-report")
     public String showGenerateReportPage() {
-        return "generate-report";
+        return "Orders/generate-report";
     }
 
     @GetMapping("/report")
     public String showReportPage() {
-        return "report";
+        return "Orders/report";
     }
 }
