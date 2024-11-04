@@ -8,29 +8,42 @@
 </head>
 <body>
 <div th:insert="~{fragments/navbar}"></div>
-<div >
-    <h1>Rezervacijos informacija</h1>
+<h1>Rezervacijos informacija</h1>
+    <table >
+        <thead>
+        <tr>
+            <th>Rezervacijos Nr</th>
+            <th>Vardas-Pavardė</th>
+            <th>Rezervavimo data</th>
+            <th>Rezervuota žmonių</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td th:text="${reservation.id}"></td>
+            <td th:text="${reservation.customerName}"></td>
+            <td th:text="${reservation.date}"></td>
+            <td th:text="${reservation.people}"></td>
+            <td>
+                <button th:onclick="|window.location='@{/reservations/edit/{id}(id=${reservation.id})}'|"
+                        style="border: 2px solid #04AA6D;" class="view-button">Redaguoti rezervaciją</button>
+            </td>
+            <td>
+                <button th:onclick="|window.location='@{/reservations/delete/confirm/{id}(id=${reservation.id})}'|"
+                        style="border: 2px solid #04AA6D;" class="view-button">Ištrinti rezervaciją</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 
-    <p><strong>Vardas-Pavardė:</strong> <span th:text="${reservation.customerName}"></span></p>
-    <p><strong>Data:</strong> <span th:text="${reservation.date}"></span></p>
-    <p><strong>žmonių skaičius:</strong> <span th:text="${reservation.people}"></span></p>
-
-    <!-- Buttons for Edit and Delete actions -->
-    <div>
-        <a th:href="@{/reservations/edit/{id}(id=${reservation.id})}">
-            <button>Redaguoti rezervaciją</button>
-        </a>
-        <a th:href="@{/reservations/delete/{id}(id=${reservation.id})}">
-            <button style="background-color: red; color: white;">Ištrinti rezervaciją</button>
-        </a>
         <!--<form th:action="@{/reservations/delete/{id}(id=${reservation.id})}" method="post" style="display: inline;">
         //    <button type="submit" onclick="return confirm('Ištrinti rezervaciją?');">
         //        Ištrinti rezervaciją
         //   </button>
         //</form> -->
-    </div>
+
 
     <a href="/reservations"><button>Gryžti į sarašą</button></a>
-</div>
 </body>
 </html>
