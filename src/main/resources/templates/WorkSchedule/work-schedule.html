@@ -4,46 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Darbuotojų darbo grafikas</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
     <script>
         function confirmRemove(weekNumber) {
-            if (confirm("Ar tikrai norite pašalinti šią savaitę?")) {
-                window.location.href = "/work-schedule/week/" + weekNumber + "/remove";
-            }
+            window.location.href = "/work-schedule/week/" + weekNumber + "/confirm-remove";
         }
     </script>
 </head>
 <body>
-
+<div th:include="fragments/navbar"></div>
 <div class="container">
-    <h1>Darbuotojų darbo grafikas</h1>
 
-    <div class="week">
-        <a class="week-header">Pirma savaitė</a>
-        <button type="button" class="week-header"
+    <h2>Darbuotojų darbo grafikas</h2>
+
+    <div class="edit-order">
+        <span class="week-header">Pirma savaitė</span>
+        <button type="button" class="view-button"
                 th:data-url="@{/work-schedule/week/1}"
                 onclick="window.location.href=this.getAttribute('data-url')">Peržiūrėti</button>
-        <button type="button" class="edit-button"
+        <button type="button" class="view-button"
                 th:data-url="@{/work-schedule/week/1/edit}"
                 onclick="window.location.href=this.getAttribute('data-url')">Redaguoti</button>
-        <button onclick="confirmRemove(1)" class="remove-button">Šalinti</button>
+        <button onclick="confirmRemove(1)" class="view-button">Šalinti</button>
     </div>
 
-    <div class="week">
-        <a class="week-header">Antra savaitė</a>
-        <button type="button" class="week-header"
+    <div class="edit-order">
+        <span class="week-header">Antra savaitė</span>
+        <button type="button" class="view-button"
                 th:data-url="@{/work-schedule/week/2}"
                 onclick="window.location.href=this.getAttribute('data-url')">Peržiūrėti</button>
-        <button type="button" class="edit-button"
+        <button type="button" class="view-button"
                 th:data-url="@{/work-schedule/week/2/edit}"
                 onclick="window.location.href=this.getAttribute('data-url')">Redaguoti</button>
-        <button onclick="confirmRemove(2)" class="remove-button">Šalinti</button>
+        <button onclick="confirmRemove(2)" class="view-button">Šalinti</button>
     </div>
-    <button type="button" class="week-header">Generuoti Savaitės grafiką</button>
-    <form action="/" method="get">
-        <button class="submit-button">grįžti atgal</button>
-    </form>
 
+
+    <button type="button" class="view-button">Generuoti Savaitės grafiką</button>
+
+    <form action="/" method="get" class="back-form">
+        <button class="submit-button">Grįžti atgal</button>
+    </form>
 </div>
+
 </body>
 </html>
