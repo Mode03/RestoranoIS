@@ -8,22 +8,18 @@
 </head>
 <body>
 <div th:insert="~{fragments/navbar}"></div>
-<div >
+<div class="center-actions">
   <h1>Ar tikrai ištrinti rezervaciją?</h1>
-
-  <p><strong>Vardas-Pavardė:</strong> <span th:text="${reservation.customerName}"></span></p>
-  <p><strong>Data:</strong> <span th:text="${reservation.date}"></span></p>
-  <p><strong>Žmonių skaičius:</strong> <span th:text="${reservation.people}"></span></p>
-
-  <!-- Final confirmation button -->
+  <td>
+    <button th:onclick="|window.location='@{/reservations/delete/{id}(id=${reservation.id})}'|" style="border: 2px solid #c20615; width:76px;" class="modify-button">Taip, pašalinti</button>
+  </td>
+  <!-- Final confirmation button
   <form th:action="@{/reservations/delete/confirm/{id}(id=${reservation.id})}" method="post">
     <button type="submit" style="background-color: red; color: white;">Ištrinti</button>
   </form>
+  -->
+  <a href="/reservations" class="cancel-link">Atšaukti</a>
 
-  <!-- Cancel button -->
-  <a th:href="@{/reservations/view/{id}(id=${reservation.id})}">
-    <button>Atšaukti</button>
-  </a>
 </div>
 </body>
 </html>

@@ -88,7 +88,7 @@ public class ReservationsController {
     }
 
     // Show delete confirmation page
-    @GetMapping("/reservations/delete/{id}")
+    @GetMapping("/reservations/delete/confirm/{id}")
     public String showDeleteConfirmation(@PathVariable int id, Model model) {
         Reservation reservation = findReservationById(id);
         if (reservation != null) {
@@ -101,7 +101,7 @@ public class ReservationsController {
     }
 
     // Process the final deletion after confirmation
-    @PostMapping("/reservations/delete/confirm/{id}")
+    @GetMapping("/reservations/delete/{id}")
     public String confirmDeleteReservation(@PathVariable int id, Model model) {
         reservations.removeIf(reservation -> reservation.getId() == id);
         model.addAttribute("info", "Reservation deleted successfully.");
