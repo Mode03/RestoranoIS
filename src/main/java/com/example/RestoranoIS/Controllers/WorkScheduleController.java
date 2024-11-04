@@ -14,21 +14,21 @@ public class WorkScheduleController {
 
     @GetMapping("/work-schedule")
     public String showWorkSchedulePage() {
-        return "work-schedule";
+        return "WorkSchedule/work-schedule";
     }
 
     @GetMapping("/work-schedule/week/{weekNumber}")
     public String showDetailedSchedule(@PathVariable int weekNumber, Model model) {
         model.addAttribute("weekNumber", weekNumber);
         model.addAttribute("schedule", getScheduleForWeek(weekNumber));
-        return "detailed-schedule";
+        return "WorkSchedule/detailed-schedule";
     }
 
     @GetMapping("/work-schedule/week/{weekNumber}/edit")
     public String editSchedule(@PathVariable int weekNumber, Model model) {
         model.addAttribute("weekNumber", weekNumber);
         model.addAttribute("schedule", getScheduleForWeek(weekNumber));
-        return "edit-schedule";
+        return "WorkSchedule/edit-schedule";
     }
 
     @PostMapping("/work-schedule/week/{weekNumber}/save")
@@ -41,6 +41,12 @@ public class WorkScheduleController {
     public String removeSchedule(@PathVariable int weekNumber) {
         deleteScheduleForWeek(weekNumber);
         return "redirect:/work-schedule";
+    }
+
+    @GetMapping("/work-schedule/week/{weekNumber}/confirm-remove")
+    public String confirmRemoveSchedule(@PathVariable int weekNumber, Model model) {
+        model.addAttribute("weekNumber", weekNumber);
+        return "WorkSchedule/confirm-remove";
     }
 
     private List<String> getScheduleForWeek(int weekNumber) {

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redaguoti Darbo Grafiką - Savaitė</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="container">
+  <h2>Redaguoti Darbo Grafiką - Savaitė <span th:text="${weekNumber}"></span></h2>
+  <!-- <form th:action="@{/work-schedule/week/{weekNumber}/save}" th:method="post" th:object="${schedule}"> -->
+  <form>
+    <div class="container">
+      <div class="edit-order" th:each="entry, iter : ${schedule}">
+        <label>Darbuotojas:</label>
+        <input type="text" name="workerEntries" th:value="${entry}" class="input-field" />
+      </div>
+    </div>
+
+    <button type="submit" class="submit-button">Išsaugoti</button>
+  </form>
+
+  <form action="/work-schedule" method="get" class="back-form">
+    <button class="submit-button">Grįžti į sąrašą</button>
+  </form>
+</div>
+
+</body>
+</html>

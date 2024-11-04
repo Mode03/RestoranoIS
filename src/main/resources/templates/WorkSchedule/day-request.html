@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Prašymas dėl atostogų</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-
+<div th:include="fragments/navbar"></div>
 <div class="container">
-  <h1>Prašymas dėl atostogų</h1>
-  <form action="/" method='get'>
+  <h2>Prašymas dėl atostogų</h2>
+  <form action="/" method="get" class="request-form">
     <div class="form-group">
       <label for="dateFrom">Pasirinkite dieną (nuo):</label>
       <input type="date" id="dateFrom" name="dateFrom" required>
@@ -21,9 +21,7 @@
     </div>
     <button class="submit-button">Pateikti prašymą</button>
   </form>
-  <form action="/" method="get">
-    <button class="submit-button">grįžti atgal</button>
-  </form>
+  <a th:href="@{/}">Atgal į sarašą</a>
 </div>
 
 </body>

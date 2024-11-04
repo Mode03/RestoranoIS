@@ -4,26 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Darbo Grafikas - Savaitė</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
 
 <div class="container">
     <h1>Darbo Grafikas - Savaitė <span th:text="${weekNumber}"></span></h1>
 
-    <div class="schedule-list">
-        <div th:each="entry, iter : ${schedule}">
-            <p th:text="${entry}"></p>
+    <div class="container">
+        <div class="edit-order" th:each="entry, iter : ${schedule}">
+            <p th:text="${entry}" class="week-header"></p>
         </div>
     </div>
 
-    <a href="/work-schedule">Grįžti į savaitės apžvalgą</a>
+    <form action="/work-schedule" method="get" class="back-form">
+        <button class="submit-button">Grįžti į savaitės apžvalgą</button>
+    </form>
 </div>
-<script>
-    function removeWorker(workerIndex) {
-        alert("Remove worker at index: " + workerIndex);
-    }
-</script>
 
 </body>
 </html>
