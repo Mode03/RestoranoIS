@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Užsakymų Sąrašas</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<!-- Navigation bar -->
+<div th:replace="fragments/navbar"></div>
+
+<h2>Užsakymų Sąrašas</h2>
+
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Vartotojo Vardas</th>
+        <th>Užsakymo Data</th>
+        <th>Veiksmai</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>1</td>
+        <td>vartotojas1</td>
+        <td>2023-11-01</td>
+        <td>
+            <button type="button" onclick="window.location.href='/view-order'">Peržiūrėti</button>
+            <button type="button" onclick="window.location.href='/edit-order'">Redaguoti</button>
+            <button type="button" onclick="window.location.href='/delete-order'">Atšaukti</button>
+        </td>
+    </tr>
+    <tr>
+        <td>2</td>
+        <td>vartotojas2</td>
+        <td>2023-11-02</td>
+        <td>
+            <button type="button" onclick="window.location.href='/view-order'">Peržiūrėti</button>
+            <button type="button" onclick="window.location.href='/edit-order'">Redaguoti</button>
+            <button type="button" onclick="window.location.href='/delete-order'">Atšaukti</button>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<div class="center-actions">
+    <button onclick="window.location.href='/generate-report'">Generuoti Ataskaitą</button>
+</div>
+
+</body>
+</html>

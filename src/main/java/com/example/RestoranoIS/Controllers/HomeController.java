@@ -52,6 +52,17 @@ public class HomeController {
         return "profile";
     }
 
+    @GetMapping("/edit-profile")
+    public String showEditProfilePage() {
+        return "edit-profile";
+    }
+
+    @PostMapping("/edit-profile")
+    public String updateProfile() {
+        // Logika redagavimui
+        return "redirect:/edit-profile";
+    }
+  
     @GetMapping("/day-request")
     public String showDayRequestPage() {return "day-request";}
 }
