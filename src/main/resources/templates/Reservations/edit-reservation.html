@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rezervacijos redagavimas</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:insert="~{fragments/navbar}"></div>
+<div >
+    <h1>Rezervacijos informacijos redagavimas</h1>
+    <form th:action="@{/reservations/edit/{id}(id=${reservation.id})}" method="post">
+        <label for="customerName">Vardas-Pavardė:</label>
+        <input type="text" id="customerName" name="customerName" th:value="${reservation.customerName}" required>
+
+        <label for="date">Data:</label>
+        <input type="date" id="date" name="date" th:value="${reservation.date}" required>
+
+        <label for="people">Žmonių skaičius:</label>
+        <input type="number" id="people" name="people" th:value="${reservation.people}" min="1" required>
+
+        <button type="submit">Išsaugoti pakeitimus</button>
+    </form>
+
+    <a th:href="@{/reservations/view/{id}(id=${reservation.id})}"><button>Atšaukti redagavimą</button></a>
+</div>
+</body>
+</html>
