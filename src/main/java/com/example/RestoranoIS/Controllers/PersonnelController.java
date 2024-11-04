@@ -9,11 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
-import java.io.Console;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+
 
 @Controller
 public class PersonnelController {
@@ -23,23 +20,30 @@ public class PersonnelController {
     @GetMapping("/personnel-list")
     public String showPersonnelList(Model model) {
         model.addAttribute("workers", workersTest);
-        return "personnel-list";
+        return "Personnel/personnel-list";
     }
 
     @GetMapping("/personnel-list/view/{id}")
     public String viewPersonnelInfo(@PathVariable int id, Model model){
 //        model.addAttribute(getWorkerbyId(id));
         model.addAttribute(workersTest.get(getWorkerIndex(id)));
-        return "view-personnel";
+        return "Personnel/view-personnel";
     }
     @GetMapping("/personnel-list/edit/{id}")
     public String editPersonnelInfo(@PathVariable int id, Model model){
         model.addAttribute(workersTest.get(getWorkerIndex(id)));
-        return "edit-personnel";
+        return "Personnel/edit-personnel";
     }
+
+    @GetMapping("/personnel-list/edit/delete/confirm/{id}")
+    public String confirmDeletePersonnel(@PathVariable int id, Model model){
+        model.addAttribute(workersTest.get(getWorkerIndex(id)));
+        return "Personnel/delete-personnel";
+    }
+
     @GetMapping("/personnel-list/create")
     public String createPersonnel(){
-        return "create-personnel";
+        return "Personnel/create-personnel";
     }
 
     @PostMapping("/personnel-list/create/submit")
@@ -53,15 +57,15 @@ public class PersonnelController {
         lastIndex++;
         workersTest.add(worker);
         model.addAttribute("workers", workersTest);
-        return "personnel-list";
+        return "Personnel/personnel-list";
     }
 
-    @PostMapping("/personnel-list/edit/delete/{id}")
+    @GetMapping("/personnel-list/edit/delete/{id}")
     public String deletePersonnel(@PathVariable int id, Model model){
         int index = getWorkerIndex(id);
         workersTest.remove(index);
         model.addAttribute("workers", workersTest);
-        return "personnel-list";
+        return "Personnel/personnel-list";
     }
 
     @PostMapping("/personnel-list/edit/save/{id}")
@@ -76,17 +80,17 @@ public class PersonnelController {
             model.addAttribute("error", "Reikia užpildyti visus laukus.");
 
             model.addAttribute(worker);
-            return "edit-personnel";
+            return "Personnel/edit-personnel";
         }
         workersTest.set(getWorkerIndex(id), worker);
         model.addAttribute("worker", worker);
-        return "view-personnel";
+        return "Personnel/view-personnel";
     }
 
     @GetMapping("/personnel-list/salary")
     public String salaryPage(Model model){
         model.addAttribute("workers", workersTest);
-        return "personnel-salary";
+        return "Personnel/personnel-salary";
     }
 
     @PostMapping("/personnel-list/salary/calculate")
@@ -96,7 +100,7 @@ public class PersonnelController {
         model.addAttribute("info", selected);
         model.addAttribute("workers", workersTest);
 
-        return "personnel-salary";
+        return "Personnel/personnel-salary";
     }
 
     @GetMapping("/personnel-list/populate")
@@ -110,7 +114,7 @@ public class PersonnelController {
         workersTest.add(new Worker(lastIndex, "Bob", "Brown", "321 Elm St"));
         lastIndex++;
         model.addAttribute("workers", workersTest);
-        return "personnel-list";
+        return "Personnel/personnel-list";
     }
 
     public int getWorkerIndex(int workerId){
