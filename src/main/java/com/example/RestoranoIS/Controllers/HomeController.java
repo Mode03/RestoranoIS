@@ -36,6 +36,11 @@ public class HomeController {
         return "register";
     }
 
+    @GetMapping("/logout")
+    public String logout(){
+        return "redirect:/main";
+    }
+
     @PostMapping("/register")
     public String processRegistration() {
         // Registravimosi logika
