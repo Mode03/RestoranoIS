@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rezervacijos</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:insert="~{fragments/navbar}"></div>
+<div >
+    <h1>Rezervacijos informacija</h1>
+
+    <p><strong>Vardas-Pavardė:</strong> <span th:text="${reservation.customerName}"></span></p>
+    <p><strong>Data:</strong> <span th:text="${reservation.date}"></span></p>
+    <p><strong>žmonių skaičius:</strong> <span th:text="${reservation.people}"></span></p>
+
+    <!-- Buttons for Edit and Delete actions -->
+    <div>
+        <a th:href="@{/reservations/edit/{id}(id=${reservation.id})}">
+            <button>Redaguoti rezervaciją</button>
+        </a>
+        <a th:href="@{/reservations/delete/{id}(id=${reservation.id})}">
+            <button style="background-color: red; color: white;">Ištrinti rezervaciją</button>
+        </a>
+        <!--<form th:action="@{/reservations/delete/{id}(id=${reservation.id})}" method="post" style="display: inline;">
+        //    <button type="submit" onclick="return confirm('Ištrinti rezervaciją?');">
+        //        Ištrinti rezervaciją
+        //   </button>
+        //</form> -->
+    </div>
+
+    <a href="/reservations"><button>Gryžti į sarašą</button></a>
+</div>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rezervacijų sąrašas</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:insert="~{fragments/navbar}"></div>
+<div >
+    <h1>Rezervacijų sąrašas</h1>
+    <table >
+        <thead>
+        <tr>
+            <th>Rezervacijos Nr</th>
+            <th>Vardas-Pavardė</th>
+            <th>Rezervavimo data</th>
+            <th>Rezervuota žmonių</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="reservation : ${reservations}">
+            <td th:text="${reservation.id}"></td>
+            <td th:text="${reservation.customerName}"></td>
+            <td th:text="${reservation.date}"></td>
+            <td th:text="${reservation.people}"></td>
+            <td>
+                <button th:onclick="|window.location='@{/reservations/view/{id}(id=${reservation.id})}'|"
+                        style="border: 2px solid #04AA6D;" class="view-button">Peržiūrėti</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div>
+        <button th:onclick="|window.location='@{/reservations/create}'|"
+                style="border: 2px solid #04AA6D;" class="view-button">Kurti naują rezervaciją</button>
+    </div>
+
+    <div th:if="${info}" style="color: blue;">
+        <p th:text="${info}"></p>
+    </div>
+</div>
+</body>
+</html>

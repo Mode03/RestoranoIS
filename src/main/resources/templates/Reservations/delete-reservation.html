@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rezervacijos ištrinimas</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:insert="~{fragments/navbar}"></div>
+<div >
+  <h1>Ar tikrai ištrinti rezervaciją?</h1>
+
+  <p><strong>Vardas-Pavardė:</strong> <span th:text="${reservation.customerName}"></span></p>
+  <p><strong>Data:</strong> <span th:text="${reservation.date}"></span></p>
+  <p><strong>Žmonių skaičius:</strong> <span th:text="${reservation.people}"></span></p>
+
+  <!-- Final confirmation button -->
+  <form th:action="@{/reservations/delete/confirm/{id}(id=${reservation.id})}" method="post">
+    <button type="submit" style="background-color: red; color: white;">Ištrinti</button>
+  </form>
+
+  <!-- Cancel button -->
+  <a th:href="@{/reservations/view/{id}(id=${reservation.id})}">
+    <button>Atšaukti</button>
+  </a>
+</div>
+</body>
+</html>
