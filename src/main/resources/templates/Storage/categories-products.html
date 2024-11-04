@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Produktų Sąrašas</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<!-- Navigation bar -->
+<div th:replace="~{fragments/navbar}"></div>
+
+<h2>Produktų Sąrašas</h2>
+
+<table>
+    <thead>
+    <tr>
+        <th>Kategorijos pavadinimas</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>Daržovės</td>
+        <td><button type="button" onclick="window.location.href='/products'">Select</button></td>
+
+    </tr>
+    <tr>
+        <td>Vaisiai</td>
+        <td><button type="button" onclick="window.location.href='/products'">Select</button></td>
+
+    </tr>
+    <tr>
+        <td>Gėrimai</td>
+        <td><button type="button" onclick="window.location.href='/products'">Select</button></td>
+
+    </tr>
+    <tr>
+        <td>Mėsos produktai</td>
+        <td><button type="button" onclick="window.location.href='/products'">Select</button></td>
+    </tr>
+    </tbody>
+</table>
+
+<div class="center-actions">
+    <button onclick="window.location.href='/products'">Gryžti į sarašą</button>
+</div>
+
+</body>
+</html>

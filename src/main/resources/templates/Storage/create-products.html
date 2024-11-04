@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Produktų Papildymas</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<!-- Navigation bar -->
+<div th:replace="~{fragments/navbar}"></div>
+
+<h2>Produktų Papildymas</h2>
+<form>
+    <div>
+        <label>Pavadinimas: </label><input type="text" name="Name"/>
+        <label>Kategorija: </label>
+        <select name="Category" id="Category">
+            <option value="Fruits">Vaisius</option>
+            <option value="Vegetables">Daržovė</option>
+            <option value="Meat">Mėsa</option>
+            <option value="Drinks">Gėrimas</option>
+        </select>
+    </div>
+
+    <button onclick="window.location.href='/products'">Papildyti</button>
+</form>
+
+
+<div class="center-actions">
+    <button onclick="window.location.href='/products'">Gryžti į sarašą</button>
+</div>
+
+</body>
+</html>

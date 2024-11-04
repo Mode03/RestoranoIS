@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Produktų Sąrašas</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<!-- Navigation bar -->
+<div th:replace="~{fragments/navbar}"></div>
+<div>
+    <button type="button" onclick="window.location.href='/products/create'">Pildyti produktus</button>
+    <button type="button" onclick="window.location.href='/products/order'">Užsakyti produktus</button>
+    <button type="button" onclick="window.location.href='/products/delete'">Šalinti produktus</button>
+    <button type="button" onclick="window.location.href='/products/categories'">Produktai pagal kategoriją</button>
+</div>
+
+<h2>Produktų Sąrašas</h2>
+
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Pavadinimas</th>
+        <th>Kiekis</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>1</td>
+        <td>Pomidoras</td>
+        <td>10</td>
+    </tr>
+    <tr>
+        <td>2</td>
+        <td>Agurkas</td>
+        <td>10</td>
+    </tr>
+    <tr>
+        <td>3</td>
+        <td>Pupelės</td>
+        <td>5</td>
+    </tr>
+    <tr>
+        <td>4</td>
+        <td>Baklažanas</td>
+        <td>20</td>
+    </tr>
+    <tr>
+        <td>5</td>
+        <td>Krienas</td>
+        <td>20</td>
+    </tr>
+    <tr>
+        <td>6</td>
+        <td>Svogūnas</td>
+        <td>20</td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
