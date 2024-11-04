@@ -35,6 +35,11 @@ public class OrderController {
         return "redirect:/orders";
     }
 
+    @GetMapping("/create-order")
+    public String showCreateOrderForm() {
+        return "Orders/create-order";
+    }
+
     @GetMapping("/generate-report")
     public String showGenerateReportPage() {
         return "Orders/generate-report";
