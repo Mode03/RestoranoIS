@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Darbuotojų sarašas</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:insert="~{fragments/navbar}"></div>
+
+<h2>Darbuotojo informacija</h2>
+<table>
+    <thead>
+    <tr>
+        <th>Tab Nr</th>
+        <th>Vardas</th>
+        <th>Pavardė</th>
+        <th>Adresas</th>
+        <th colspan="2">Veiksmai</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td th:text="${worker.Tab_nr}"></td>
+        <td th:text="${worker.Name}"></td>
+        <td th:text="${worker.LastName}"></td>
+        <td th:text="${worker.Address}"></td>
+        <td>
+            <button th:onclick="|window.location='@{/personnel-list/edit/{id}(id=${worker.Tab_nr})}'|" style="border: 2px solid #0609c7; width:76px;" class="modify-button">Redaguoti</button>
+        </td>
+        <td>
+            <button th:onclick="|window.location='@{/personnel-list/edit/delete/confirm/{id}(id=${worker.Tab_nr})}'|" style="border: 2px solid #c20615; width:76px;" class="modify-button">Ištrinti</button>
+        </td>
+<!--        <form th:action="@{/personnel-list/edit/delete/{id}(id=${worker.Tab_nr})}" th:method="post">-->
+<!--            <td>-->
+<!--                <button style="border: 2px solid #c20615; width:76px;" type="submit" class="delete-button">Ištrinti</button>-->
+<!--            </td>-->
+<!--        </form>-->
+    </tr>
+    </tbody>
+</table>
+<a th:href="@{/personnel-list}">Atgal į sarašą</a>
+
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Personalo Pašalinimas</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div th:replace="fragments/navbar"></div>
+<h2>Patvirtinti Personalo Pašalinimą</h2>
+<div class="center-actions">
+    <p>Ar tikrai norite pašalinti Šį personalą?</p>
+<!--    <form th:action="@{/personnel-list/edit/delete/{id}(id=${worker.Tab_nr})}" th:method="post">-->
+<!--        <td>-->
+<!--            <button style="border: 2px solid #c20615; width:76px;" type="submit" class="delete-button">Taip, pašalinti</button>-->
+<!--        </td>-->
+<!--    </form>-->
+    <td>
+        <button th:onclick="|window.location='@{/personnel-list/edit/delete/{id}(id=${worker.Tab_nr})}'|" style="border: 2px solid #c20615; width:76px;" class="modify-button">Taip, pašalinti</button>
+    </td>
+    <a href="/personnel-list" class="cancel-link">Atšaukti</a>
+</div>
+</body>
+</html>

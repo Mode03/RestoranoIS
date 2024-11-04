@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Darbuotojų sarašas</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:insert="~{fragments/navbar}"></div>
+
+<h2>Darbuotojų sarašas</h2>
+
+<form th:action="@{/personnel-list/salary/calculate}" th:method="post" >
+    <table>
+        <thead>
+        <tr>
+            <th>Tab Nr</th>
+            <th>Vardas</th>
+            <th>Pavardė</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="worker : ${workers}">
+            <td th:text="${worker.Tab_nr}"></td>
+            <td th:text="${worker.Name}"></td>
+            <td th:text="${worker.LastName}"></td>
+            <td>
+                <input type="checkbox" name="selected" th:value="${worker.Tab_nr}">
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <button style="border: 2px solid #04AA6D;" class="view-button" type="submit">Skaičiuoti</button>
+</form>
+<a th:href="@{/personnel-list}">Atgal į sarašą</a>
+
+<div th:if="${info}" style="color: blue;">
+    <p th:text="${info}"></p>
+</div>
+</body>
+</html>
