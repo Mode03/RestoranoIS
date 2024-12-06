@@ -6,17 +6,81 @@
     <title>Registracija</title>
 </head>
 <body>
-    <div th:include="fragments/navbar"></div>
-    <h2>Registracijos langas</h2>
-    <form action="/register" method="post">
-        <label for="username">Vartotojo vardas:</label>
-        <input type="text" id="username" name="username" required>
-        <label for="password">Slaptažodis:</label>
-        <input type="password" id="password" name="password" required>
-        <label for="email">El. paštas:</label>
-        <input type="email" id="email" name="email" required>
-        <br><br>
-        <button type="submit">Registruotis</button>
-    </form>
+<div th:include="fragments/navbar"></div>
+<h1>Registracija</h1>
+<form action="/register" method="post">
+    <label for="vardas">Vardas:</label>
+    <input type="text" id="vardas" name="vardas" required><br>
+
+    <label for="pavarde">Pavardė:</label>
+    <input type="text" id="pavarde" name="pavarde" required><br>
+
+    <label for="gimimoData">Gimimo data:</label>
+    <input type="date" id="gimimoData" name="gimimoData" required><br>
+
+    <label for="elPastas">El. paštas:</label>
+    <input type="email" id="elPastas" name="elPastas" required><br>
+
+    <label for="slaptazodis">Slaptažodis:</label>
+    <input type="password" id="slaptazodis" name="slaptazodis" required><br>
+
+    <label for="lytis">Lytis:</label>
+    <select id="lytis" name="lytis">
+        <option value="Vyras">Vyras</option>
+        <option value="Moteris">Moteris</option>
+    </select><br>
+
+    <label for="userType">Vartotojo tipas:</label>
+    <select id="userType" name="userType" required onchange="toggleFields()">
+        <option value="">Pasirinkite...</option>
+        <option value="klientas">Klientas</option>
+        <option value="darbuotojas">Darbuotojas</option>
+        <option value="administratorius">Administratorius</option>
+    </select><br>
+
+    <!-- Papildomi laukai -->
+    <div id="clientFields" style="display: none;">
+        <label for="slapyvardis">Slapyvardis:</label>
+        <input type="text" id="slapyvardis" name="slapyvardis"><br>
+    </div>
+
+    <div id="employeeFields" style="display: none;">
+        <label for="asmensKodas">Asmens kodas:</label>
+        <input type="text" id="asmensKodas" name="asmensKodas"><br>
+        <label for="pareigos">Pareigos:</label>
+        <input type="text" id="pareigos" name="pareigos"><br>
+        <label for="telefonas">Telefonas:</label>
+        <input type="text" id="telefonas" name="telefonas"><br>
+        <label for="adresas">Adresas:</label>
+        <input type="text" id="adresas" name="adresas"><br>
+        <select name="miestas" required>
+            <option value="" disabled selected>Pasirinkite miestą</option>
+            <th:block th:each="city : ${cities}">
+                <option th:value="${city.pavadinimas}" th:text="${city.pavadinimas}"></option>
+            </th:block>
+        </select>
+    </div>
+
+    <div id="adminFields" style="display: none;">
+        <label for="specialKey">Slaptas raktas:</label>
+        <input type="text" id="specialKey" name="specialKey"><br>
+    </div>
+
+    <button type="submit">Registruotis</button>
+</form>
+
+<script>
+    function toggleFields() {
+        const userType = document.getElementById("userType").value;
+
+        // Rodyti/slėpti laukus
+        document.getElementById("clientFields").style.display = userType === "klientas" ? "block" : "none";
+        document.getElementById("employeeFields").style.display = userType === "darbuotojas" || userType === "administratorius" ? "block" : "none";
+        document.getElementById("adminFields").style.display = userType === "administratorius" ? "block" : "none";
+    }
+</script>
+
+<p th:if="${message}" th:text="${message}"></p>
+<p th:if="${error}" th:text="${error}"></p>
 </body>
 </html>
