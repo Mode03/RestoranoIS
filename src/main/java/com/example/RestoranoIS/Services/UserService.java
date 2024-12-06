@@ -37,9 +37,6 @@ public class UserService {
         User savedUser = userRepository.save(user);
 
         City selectedCity = cityRepository.findBypavadinimas(miestas);
-        if (selectedCity == null) {
-            throw new IllegalArgumentException("Nurodytas miestas neegzistuoja!");
-        }
 
         // 2. Pagal vaidmenį įrašome į papildomas lenteles
         switch (userType.toLowerCase()) {
@@ -65,10 +62,6 @@ public class UserService {
             default:
                 throw new IllegalArgumentException("Neteisingas vartotojo tipas!");
         }
-    }
-
-    public City findCityByName(String cityName) {
-        return cityRepository.findBypavadinimas(cityName);
     }
 
     public List<City> getAllCities() {

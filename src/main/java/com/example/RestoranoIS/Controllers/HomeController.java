@@ -97,11 +97,6 @@ public class HomeController {
 
             System.out.println(miestas);
 
-            City selectedCity = userService.findCityByName(miestas);
-            if (selectedCity == null) {
-                throw new IllegalArgumentException("Pasirinktas miestas nerastas!");
-            }
-
             // Sukuriame User objektą
             User user = new User(vardas, pavarde, gimimoDataFormatted, elPastas, slaptazodis, lytis);
 

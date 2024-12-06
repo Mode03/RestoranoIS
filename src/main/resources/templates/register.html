@@ -16,7 +16,7 @@
     <input type="text" id="pavarde" name="pavarde" required><br>
 
     <label for="gimimoData">Gimimo data:</label>
-    <input type="date" id="gimimoData" name="gimimoData" required><br>
+    <input type="date" id="gimimoData" name="gimimoData" required><br><br>
 
     <label for="elPastas">El. paštas:</label>
     <input type="email" id="elPastas" name="elPastas" required><br>
@@ -28,7 +28,7 @@
     <select id="lytis" name="lytis">
         <option value="Vyras">Vyras</option>
         <option value="Moteris">Moteris</option>
-    </select><br>
+    </select><br><br>
 
     <label for="userType">Vartotojo tipas:</label>
     <select id="userType" name="userType" required onchange="toggleFields()">
@@ -36,7 +36,7 @@
         <option value="klientas">Klientas</option>
         <option value="darbuotojas">Darbuotojas</option>
         <option value="administratorius">Administratorius</option>
-    </select><br>
+    </select><br><br>
 
     <!-- Papildomi laukai -->
     <div id="clientFields" style="display: none;">
@@ -53,15 +53,13 @@
         <input type="text" id="telefonas" name="telefonas"><br>
         <label for="adresas">Adresas:</label>
         <input type="text" id="adresas" name="adresas"><br>
-        <select name="miestas" required>
+        <label for="miestas">Miestas:</label>
+        <select id="miestas" name="miestas">
             <option value="" disabled selected>Pasirinkite miestą</option>
             <th:block th:each="city : ${cities}">
                 <option th:value="${city.pavadinimas}" th:text="${city.pavadinimas}"></option>
             </th:block>
-        </select>
-    </div>
-
-    <div id="adminFields" style="display: none;">
+        </select><br><br>
         <label for="specialKey">Slaptas raktas:</label>
         <input type="text" id="specialKey" name="specialKey"><br>
     </div>
@@ -73,10 +71,34 @@
     function toggleFields() {
         const userType = document.getElementById("userType").value;
 
+        // Gauti elementus
+        const clientFields = document.getElementById("clientFields");
+        const slapyvardisField = document.getElementById("slapyvardis");
+
+        const employeeFields = document.getElementById("employeeFields");
+        const employeeFieldsInputs = employeeFields.querySelectorAll("input, select");
+
         // Rodyti/slėpti laukus
-        document.getElementById("clientFields").style.display = userType === "klientas" ? "block" : "none";
-        document.getElementById("employeeFields").style.display = userType === "darbuotojas" || userType === "administratorius" ? "block" : "none";
-        document.getElementById("adminFields").style.display = userType === "administratorius" ? "block" : "none";
+        if (userType === "klientas") {
+            clientFields.style.display = "block";
+            slapyvardisField.setAttribute("required", "true");
+
+            employeeFields.style.display = "none";
+            employeeFieldsInputs.forEach(input => input.removeAttribute("required"));
+        } else if (userType === "darbuotojas" || userType === "administratorius") {
+            employeeFields.style.display = "block";
+            employeeFieldsInputs.forEach(input => input.setAttribute("required", "true"));
+
+            clientFields.style.display = "none";
+            slapyvardisField.removeAttribute("required");
+        } else {
+            // Paslėpti abu, jei nieko nepasirinkta
+            clientFields.style.display = "none";
+            slapyvardisField.removeAttribute("required");
+
+            employeeFields.style.display = "none";
+            employeeFieldsInputs.forEach(input => input.removeAttribute("required"));
+        }
     }
 </script>
 
