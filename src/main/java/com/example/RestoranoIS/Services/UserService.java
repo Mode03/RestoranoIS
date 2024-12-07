@@ -7,9 +7,11 @@ import com.example.RestoranoIS.Repositories.ClientRepository;
 import com.example.RestoranoIS.Repositories.EmployeeRepository;
 import com.example.RestoranoIS.Repositories.AdministratorRepository;
 import com.example.RestoranoIS.Repositories.CityRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import java.util.List;
 
@@ -32,40 +34,50 @@ public class UserService {
     }
 
     public void registerUserWithRole(User user, String userType, String specialKey, String asmensKodas, String pareigos,
-                                     String telefonas, String adresas, String slapyvardis, String miestas) {
-        // 1. Pirmiausia įrašome vartotoją į pagrindinę lentelę "NAUDOTOJAI"
-        User savedUser = userRepository.save(user);
+                                     String telefonas, String adresas, String slapyvardis, String miestas, Model model) {
 
-        City selectedCity = cityRepository.findBypavadinimas(miestas);
+        try {
 
-        // 2. Pagal vaidmenį įrašome į papildomas lenteles
-        switch (userType.toLowerCase()) {
-            case "klientas":
-                Client client = new Client(savedUser.getId(), slapyvardis);
-                clientRepository.save(client);
-                break;
+            // 1. Pirmiausia įrašome vartotoją į pagrindinę lentelę "NAUDOTOJAI"
+            User savedUser = userRepository.save(user);
 
-            case "darbuotojas":
-                Employee employee = new Employee(savedUser.getId(), asmensKodas, pareigos, telefonas, adresas, selectedCity);
-                employeeRepository.save(employee);
-                break;
+            City selectedCity = cityRepository.findBypavadinimas(miestas);
 
-            case "administratorius":
-                Employee adminAsEmployee = new Employee(savedUser.getId(), asmensKodas, pareigos, telefonas, adresas, selectedCity);
-                Administrator administrator = new Administrator(savedUser.getId(), specialKey);
+            // 2. Pagal vaidmenį įrašome į papildomas lenteles
+            switch (userType.toLowerCase()) {
+                case "klientas":
+                    Client client = new Client(savedUser.getId(), slapyvardis);
+                    clientRepository.save(client);
+                    break;
 
-                // Pirmiausia išsaugome kaip darbuotoją, tada kaip administratorių
-                employeeRepository.save(adminAsEmployee);
-                administratorRepository.save(administrator);
-                break;
+                case "darbuotojas":
+                    Employee employee = new Employee(savedUser.getId(), asmensKodas, pareigos, telefonas, adresas, selectedCity);
+                    employeeRepository.save(employee);
+                    break;
 
-            default:
-                throw new IllegalArgumentException("Neteisingas vartotojo tipas!");
+                case "administratorius":
+                    Employee adminAsEmployee = new Employee(savedUser.getId(), asmensKodas, pareigos, telefonas, adresas, selectedCity);
+                    Administrator administrator = new Administrator(savedUser.getId(), specialKey);
+
+                    // Pirmiausia išsaugome kaip darbuotoją, tada kaip administratorių
+                    employeeRepository.save(adminAsEmployee);
+                    administratorRepository.save(administrator);
+                    break;
+
+                default:
+                    throw new IllegalArgumentException("Neteisingas vartotojo tipas!");
+            }
+        } catch (Exception e) {
+            model.addAttribute("error", "Registracijos metu įvyko klaida: " + e.getMessage());
         }
+
     }
 
     public List<City> getAllCities() {
         return cityRepository.findAll();
     }
 
+    public User findByEmail(String elPastas) {
+        return userRepository.findByelPastas(elPastas).orElse(null);
+    }
 }

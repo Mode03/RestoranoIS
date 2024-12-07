@@ -6,23 +6,23 @@
     <title>Registracija</title>
 </head>
 <body>
-<div th:include="fragments/navbar"></div>
+<div th:insert="~{fragments/navbar}"></div>
 <h1>Registracija</h1>
 <form action="/register" method="post">
     <label for="vardas">Vardas:</label>
-    <input type="text" id="vardas" name="vardas" required><br>
+    <input type="text" id="vardas" name="vardas" placeholder="Įveskite vardą" required><br>
 
     <label for="pavarde">Pavardė:</label>
-    <input type="text" id="pavarde" name="pavarde" required><br>
+    <input type="text" id="pavarde" name="pavarde" placeholder="Įveskite pavardę" required><br>
 
     <label for="gimimoData">Gimimo data:</label>
     <input type="date" id="gimimoData" name="gimimoData" required><br><br>
 
     <label for="elPastas">El. paštas:</label>
-    <input type="email" id="elPastas" name="elPastas" required><br>
+    <input type="email" id="elPastas" name="elPastas" placeholder="Įveskite el. paštą" required><br>
 
     <label for="slaptazodis">Slaptažodis:</label>
-    <input type="password" id="slaptazodis" name="slaptazodis" required><br>
+    <input type="password" id="slaptazodis" name="slaptazodis" placeholder="Įveskite slaptažodį" required><br>
 
     <label for="lytis">Lytis:</label>
     <select id="lytis" name="lytis">
@@ -41,18 +41,18 @@
     <!-- Papildomi laukai -->
     <div id="clientFields" style="display: none;">
         <label for="slapyvardis">Slapyvardis:</label>
-        <input type="text" id="slapyvardis" name="slapyvardis"><br>
+        <input type="text" id="slapyvardis" name="slapyvardis" placeholder="Įveskite slapyvardį"><br>
     </div>
 
     <div id="employeeFields" style="display: none;">
         <label for="asmensKodas">Asmens kodas:</label>
-        <input type="text" id="asmensKodas" name="asmensKodas"><br>
+        <input type="text" id="asmensKodas" name="asmensKodas" placeholder="Įveskite asmens kodą" pattern="\d{11}" maxlength="11" title="Asmens kodas turi būti sudarytas iš 11 skaičių"><br>
         <label for="pareigos">Pareigos:</label>
-        <input type="text" id="pareigos" name="pareigos"><br>
+        <input type="text" id="pareigos" name="pareigos" placeholder="Įveskite pareigas"><br>
         <label for="telefonas">Telefonas:</label>
-        <input type="text" id="telefonas" name="telefonas"><br>
+        <input type="text" id="telefonas" name="telefonas" placeholder="Įveskite telefono numerį" pattern="\+\d+" title="Turi prasidėti „+“ ir neturėti raidžių" ><br>
         <label for="adresas">Adresas:</label>
-        <input type="text" id="adresas" name="adresas"><br>
+        <input type="text" id="adresas" name="adresas" placeholder="Įveskite gatvę ir namo numerį"><br>
         <label for="miestas">Miestas:</label>
         <select id="miestas" name="miestas">
             <option value="" disabled selected>Pasirinkite miestą</option>
@@ -61,7 +61,7 @@
             </th:block>
         </select><br><br>
         <label for="specialKey">Slaptas raktas:</label>
-        <input type="text" id="specialKey" name="specialKey"><br>
+        <input type="text" id="specialKey" name="specialKey" placeholder="Įveskite raktą"><br>
     </div>
 
     <button type="submit">Registruotis</button>

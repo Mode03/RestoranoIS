@@ -6,7 +6,7 @@
     <title>Redaguoti profilį</title>
 </head>
 <body>
-<div th:include="fragments/navbar"></div>
+<div th:insert="~{fragments/navbar}"></div>
 <h2>Redaguoti profilį</h2>
 <form action="/edit-profile" method="post">
     <label for="username">Vartotojo vardas:</label>

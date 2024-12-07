@@ -21,7 +21,6 @@ public class User {
     @Column(name = "gimimo_data")
     private LocalDate gimimoData;
     @Column(name = "el_pastas")
-    //@Email(regexp = "^[_A-Za-z0-9-+]+(.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(.[A-Za-z0-9]+)*([A-Za-z]{2,})$")
     private String elPastas;
     private String slaptazodis;
     private String lytis;

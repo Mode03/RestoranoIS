@@ -7,7 +7,7 @@
   <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-
+<div th:insert="~{fragments/navbar}"></div>
 <div class="container">
   <h2>Redaguoti Darbo Grafiką - Savaitė <span th:text="${weekNumber}"></span></h2>
   <!-- <form th:action="@{/work-schedule/week/{weekNumber}/save}" th:method="post" th:object="${schedule}"> -->

@@ -3,11 +3,16 @@ package com.example.RestoranoIS.Controllers;
 import com.example.RestoranoIS.Models.City;
 import com.example.RestoranoIS.Services.UserService;
 import com.example.RestoranoIS.Models.User;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.ui.Model;
+
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -21,10 +26,12 @@ public class HomeController {
     private static final String ADMIN_KEY = "Administratorius123";
 
     private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public HomeController(UserService userService) {
         this.userService = userService;
+        this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
     @GetMapping("")
@@ -38,14 +45,6 @@ public class HomeController {
         return "main";
     }
 
-    // Registracijos langas
-    @GetMapping("/register")
-    public String showRegistrationPage(Model model) {
-        List<City> cities = userService.getAllCities();
-        model.addAttribute("cities", cities);
-        return "register";
-    }
-
     //Prisijungimo langas
     @GetMapping("/login")
     public String showLoginPage() {
@@ -53,9 +52,22 @@ public class HomeController {
     }
 
     @PostMapping("/login")
-    public String processLogin() {
-        // Prisijungimo logika
-        return "redirect:/main";
+    public String processLogin(String username, String password, HttpSession session, Model model) {
+        User user = userService.findByEmail(username);
+        if (user != null && passwordEncoder.matches(password, user.getSlaptazodis())) {
+            session.setAttribute("loggedInUser", user);
+            return "redirect:/main";
+        }
+        model.addAttribute("error", "Neteisingas el. paštas arba slaptažodis!");
+        return "login";
+    }
+
+    // Registracijos langas
+    @GetMapping("/register")
+    public String showRegistrationPage(Model model) {
+        List<City> cities = userService.getAllCities();
+        model.addAttribute("cities", cities);
+        return "register";
     }
 
     @PostMapping("/register")
@@ -96,12 +108,13 @@ public class HomeController {
             LocalDate gimimoDataFormatted = LocalDate.parse(gimimoData, formatter);
 
             System.out.println(miestas);
+            String encodedPassword = passwordEncoder.encode(slaptazodis);
 
             // Sukuriame User objektą
-            User user = new User(vardas, pavarde, gimimoDataFormatted, elPastas, slaptazodis, lytis);
+            User user = new User(vardas, pavarde, gimimoDataFormatted, elPastas, encodedPassword, lytis);
 
             // 3. Išsaugojame vartotoją į duomenų bazę pagal vaidmenį
-            userService.registerUserWithRole(user, userType, specialKey, asmensKodas, pareigos, telefonas, adresas, slapyvardis, miestas);
+            userService.registerUserWithRole(user, userType, specialKey, asmensKodas, pareigos, telefonas, adresas, slapyvardis, miestas, model);
 
             model.addAttribute("message", "Registracija sėkminga!");
             return "redirect:/login"; // Peradresavimas į prisijungimo puslapį
@@ -112,13 +125,19 @@ public class HomeController {
     }
 
     @GetMapping("/logout")
-    public String logout(){
+    public String logout(HttpSession session) {
+        session.invalidate();
         return "redirect:/main";
     }
 
     // Profilio langas
     @GetMapping("/profile")
-    public String showProfilePage() {
+    public String showProfilePage(HttpSession session, Model model) {
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            return "redirect:/login";
+        }
+        model.addAttribute("user", loggedInUser);
         return "profile";
     }
 
@@ -127,10 +146,14 @@ public class HomeController {
         return "edit-profile";
     }
 
-    @PostMapping("/edit-profile")
-    public String updateProfile() {
-        // Logika redagavimui
-        return "redirect:/edit-profile";
+    @GetMapping("/edit-profile/details")
+    public String showEditProfilePage(HttpSession session, Model model) {
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            return "redirect:/login";
+        }
+        model.addAttribute("user", loggedInUser);
+        return "edit-profile";
     }
   
     @GetMapping("/day-request")
