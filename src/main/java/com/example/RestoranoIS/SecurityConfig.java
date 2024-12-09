@@ -6,9 +6,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
-@EnableWebSecurity
+@EnableTransactionManagement
 public class SecurityConfig {
 
     @Bean
@@ -16,9 +17,9 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.httpBasic().disable();
-        return http.build();
-    }
+    //@Bean
+    //public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    //    http.httpBasic().disable();
+    //    return http.build();
+    //}
 }

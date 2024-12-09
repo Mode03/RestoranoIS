@@ -2,16 +2,28 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Užsakymo Pašalinimas</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 <div th:replace="~{fragments/navbar}"></div>
+
 <h2>Patvirtinti Užsakymo Pašalinimą</h2>
-<div class="center-actions">
-    <p>Ar tikrai norite pašalinti užsakymą id:1?</p>
-    <button onclick="window.location.href='/orders'" class="delete-button">Taip, pašalinti</button>
+
+<form action="/delete-order" method="post">
+    <h2>Ar tikrai norite pašalinti užsakymą:</h2>
+    <p><strong>Id:</strong> <span th:text="${order.id}"></span></p>
+    <p><strong>Klientas:</strong> <span th:text="${order.client.slapyvardis}">Vardenis</span></p>
+    <p><strong>Užsakymo data:</strong> <span th:text="${order.data}"></span></p>
+    <p><strong>Mokėjimo metodas:</strong> <span th:text="${order.paymentType.name}"></span></p>
+    <p><strong>Užsakymo būsena:</strong> <span th:text="${order.statusType.name}"></span></p>
+    <p><strong>Užsakymo suma:</strong> <span th:text="${order.getBendraSuma()}"></span></p>
+
+    <input type="hidden" name="orderId" th:value="${order.id}">
+    <button type="submit" class="delete-button">Taip, pašalinti</button>
     <a href="/orders" class="cancel-link">Atšaukti</a>
-</div>
+</form>
+
 </body>
 </html>

@@ -16,13 +16,19 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     private String vardas;
+
     private String pavarde;
+
     @Column(name = "gimimo_data")
     private LocalDate gimimoData;
+
     @Column(name = "el_pastas")
     private String elPastas;
+
     private String slaptazodis;
+
     private String lytis;
 
     public User() {

@@ -12,6 +12,8 @@ import java.time.LocalDate;
 
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
+    boolean existsByIdNaudotojas(Integer idNaudotojas);
+
     @Modifying
     @Transactional
     @Query(value = "INSERT INTO darbuotojai (adresas, alga, asmens_kodas, atostogu_dienos, fk_miestas, nuo_kada_dirba, pareigos, telefonas, id_naudotojas) " +

@@ -80,4 +80,25 @@ public class UserService {
     public User findByEmail(String elPastas) {
         return userRepository.findByelPastas(elPastas).orElse(null);
     }
+
+    public Client getClientByUserId(Integer userId) {
+        return clientRepository.findById(userId).orElse(null); // Grąžina null, jei nėra
+    }
+
+    public boolean isAdministrator(Integer userId) {
+        return administratorRepository.existsByIdNaudotojas(userId);
+    }
+
+    public boolean isClient(Integer userId) {
+        return clientRepository.existsByIdNaudotojas(userId);
+    }
+
+    public List<Client> getAllClients() {
+        return clientRepository.findAll();
+    }
+
+    public boolean isEmployee(Integer userId) {
+        return employeeRepository.existsByIdNaudotojas(userId) && !isAdministrator(userId);
+    }
+
 }
