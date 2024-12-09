@@ -35,8 +35,6 @@ public class PersonnelController {
     @Autowired private EmployeeRepository employeeRepository;
     @Autowired private UserRepository userRepository;
     @Autowired private CityRepository cityRepository;
-    ArrayList<Worker> workersTest;
-    int lastIndex = 0;
     @GetMapping("/personnel-list")
     public String showPersonnelList(Model model) {
         List<Employee> employees = employeeRepository.findAll();
@@ -151,41 +149,25 @@ public class PersonnelController {
 
     @GetMapping("/personnel-list/salary")
     public String salaryPage(Model model){
-        model.addAttribute("workers", workersTest);
+        List<Employee> employees = employeeRepository.findAll();
+        model.addAttribute("employees",employees);
         return "Personnel/personnel-salary";
     }
 
     @PostMapping("/personnel-list/salary/calculate")
-    public String getOrderForm(@RequestParam("selected") String selected, Model model){
-        //System.out.println(selected);
-        //String[] selectedArray = selected.split(",");
+    public String getOrderForm(@RequestParam("selected") String selected, Model model) {
         model.addAttribute("info", selected);
-        model.addAttribute("workers", workersTest);
+        String[] split = selected.split(",");
+        for (String value: split) {
+            int id = Integer.parseInt(value);
+            Optional<Employee> current = employeeRepository.findById(id);
+
+        }
+
+        List<Employee> employees = employeeRepository.findAll();
+        model.addAttribute("employees",employees);
 
         return "Personnel/personnel-salary";
-    }
-
-    @GetMapping("/personnel-list/populate")
-    public String populateData(Model model){
-        workersTest.add(new Worker(lastIndex, "John", "Doe", "123 Maple St"));
-        lastIndex++;
-        workersTest.add(new Worker(lastIndex, "Jane", "Smith", "456 Oak St"));
-        lastIndex++;
-        workersTest.add(new Worker(lastIndex, "Alice", "Johnson", "789 Pine St"));
-        lastIndex++;
-        workersTest.add(new Worker(lastIndex, "Bob", "Brown", "321 Elm St"));
-        lastIndex++;
-        model.addAttribute("workers", workersTest);
-        return "Personnel/personnel-list";
-    }
-
-    public int getWorkerIndex(int workerId){
-        for(int i = 0; i < workersTest.size(); i++){
-            if(workersTest.get(i).getTab_nr() == workerId){
-                return i;
-            }
-        }
-        return -1;
     }
 
 }

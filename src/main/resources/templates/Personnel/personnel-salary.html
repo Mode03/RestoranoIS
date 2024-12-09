@@ -15,19 +15,21 @@
     <table>
         <thead>
         <tr>
-            <th>Tab Nr</th>
+            <th>Darbuotojo ID</th>
             <th>Vardas</th>
-            <th>Pavardė</th>
+            <th>Pavarde</th>
+            <th>Pareigos</th>
             <th></th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="worker : ${workers}">
-            <td th:text="${worker.Tab_nr}"></td>
-            <td th:text="${worker.Name}"></td>
-            <td th:text="${worker.LastName}"></td>
+        <tr th:each="employee : ${employees}">
+            <td th:text="${employee.idNaudotojas}"></td>
+            <td th:text="${employee.user.vardas}"></td>
+            <td th:text="${employee.user.pavarde}"></td>
+            <td th:text="${employee.pareigos}"></td>
             <td>
-                <input type="checkbox" name="selected" th:value="${worker.Tab_nr}">
+                <input type="checkbox" name="selected" th:value="${employee.idNaudotojas}">
             </td>
         </tr>
         </tbody>
