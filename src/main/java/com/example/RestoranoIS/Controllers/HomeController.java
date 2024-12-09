@@ -35,17 +35,29 @@ public class HomeController {
 
     // Pagrindinis langas
     @GetMapping("")
-    public String home(){
-        return "main";
-    }
-
-    @GetMapping("/main")
-    // Pagrindinis langas
-    public String showMainPage(HttpSession session) {
+    public String home(Model model, HttpSession session){
         User loggedInUser = (User) session.getAttribute("loggedInUser");
         if (loggedInUser == null) {
             return "redirect:/login"; // Redirect to login page if not logged in
         }
+
+        boolean isEmployee = userService.isEmployee(loggedInUser.getId());
+        model.addAttribute("isEmployee", isEmployee);
+
+        return "main"; // Render the main page if user is logged in
+    }
+
+    @GetMapping("/main")
+    // Pagrindinis langas
+    public String showMainPage(Model model, HttpSession session) {
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            return "redirect:/login"; // Redirect to login page if not logged in
+        }
+
+        boolean isEmployee = userService.isEmployee(loggedInUser.getId());
+        model.addAttribute("isEmployee", isEmployee);
+
         return "main"; // Render the main page if user is logged in
     }
 

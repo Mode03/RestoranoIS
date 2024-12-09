@@ -13,8 +13,16 @@
 <div class="create-order-form">
     <form class="order-form" action="#" th:action="@{/create-order}" method="post" th:object="${client}">
 
-        <label for="username">Klientas:</label>
-        <input type="text" id="username" th:field="*{slapyvardis}" readonly required>
+        <label for="client" th:if="${isAdmin}">Pasirinkite klientą:</label>
+        <select id="client" name="clientId" th:if="${isAdmin}">
+            <option value="" disabled selected>Pasirinkite klientą</option>
+            <th:block th:each="client : ${clients}">
+                <option th:value="${client.idNaudotojas}" th:text="${client.slapyvardis}"></option>
+            </th:block>
+        </select>
+
+        <label for="username" th:if="${!isAdmin}">Klientas:</label>
+        <input type="text" id="username" th:field="*{slapyvardis}" th:if="${!isAdmin}" readonly required>
 
         <label for="paymentType">Apmokėjimo tipas:</label>
         <select id="paymentType" name="paymentTypeId" required>

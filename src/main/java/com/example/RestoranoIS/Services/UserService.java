@@ -97,4 +97,8 @@ public class UserService {
         return clientRepository.findAll();
     }
 
+    public boolean isEmployee(Integer userId) {
+        return employeeRepository.existsByIdNaudotojas(userId) && !isAdministrator(userId);
+    }
+
 }

@@ -71,11 +71,21 @@ public class OrderController {
             return "redirect:/login"; // Peradresuojame, jei vartotojas neprisijungęs
         }
 
-        // Tikriname, ar egzistuoja atitinkamas Client objektas
-        Client client = userService.getClientByUserId(loggedInUser.getId());
-        if (client == null) {
-            // Sukuriame naują Client objektą, jei nėra
-            client = new Client(loggedInUser.getId(), loggedInUser.getVardas());
+        // Patikriname, ar vartotojas yra administratorius
+        boolean isAdmin = userService.isAdministrator(loggedInUser.getId());
+        model.addAttribute("isAdmin", isAdmin);
+
+        if (isAdmin) {
+            // Jei administratorius, perduodame visus klientus pasirinkimui
+            List<Client> clients = userService.getAllClients();
+            model.addAttribute("clients", clients);
+        } else {
+            // Jei klientas, pridedame tik jo informaciją
+            Client client = userService.getClientByUserId(loggedInUser.getId());
+            if (client == null) {
+                client = new Client(loggedInUser.getId(), loggedInUser.getVardas());
+            }
+            model.addAttribute("client", client);
         }
 
         ObjectMapper mapper = new ObjectMapper();
@@ -86,8 +96,9 @@ public class OrderController {
         model.addAttribute("paymentTypes", orderService.getAllPaymentTypes());
         model.addAttribute("orderStatuses", orderService.getAllOrderStatuses());
         model.addAttribute("orderTypes", orderService.getAllOrderTypes());
-        model.addAttribute("client", client);
         model.addAttribute("dishes", orderService.getAllDishes());
+
+        System.out.println("AAAAAAAA");
 
         return "Orders/create-order";
     }
@@ -95,20 +106,29 @@ public class OrderController {
     @PostMapping("/create-order")
     public String createOrder(@RequestParam Integer paymentTypeId,
                               @RequestParam Integer orderTypeId,
+                              @RequestParam(required = false) Integer clientId, // Pasirinktas kliento ID (tik administratoriui)
                               @RequestParam List<Integer> dishIds, // Patiekalo ID sąrašas
                               @RequestParam List<Integer> quantities, // Patiekalo kiekiai
                               HttpSession session) {
         // Patikriname, ar vartotojas prisijungęs
         User loggedInUser = (User) session.getAttribute("loggedInUser");
         if (loggedInUser == null) {
-            return "redirect:/login"; // Peradresuojame, jei vartotojas neprisijungęs
+            return "redirect:/login";
         }
 
-        // Tikriname, ar egzistuoja atitinkamas Client objektas
-        Client client = userService.getClientByUserId(loggedInUser.getId());
-        if (client == null) {
-            // Jei nėra, sukuriame Client objektą
-            client = new Client(loggedInUser.getId(), loggedInUser.getVardas());
+        Client client;
+        if (userService.isAdministrator(loggedInUser.getId()) && clientId != null) {
+            // Administratorius pasirinko klientą
+            client = userService.getClientByUserId(clientId);
+            if (client == null) {
+                throw new IllegalArgumentException("Pasirinktas klientas neegzistuoja.");
+            }
+        } else {
+            // Klientas kuria užsakymą pats
+            client = userService.getClientByUserId(loggedInUser.getId());
+            if (client == null) {
+                client = new Client(loggedInUser.getId(), loggedInUser.getVardas());
+            }
         }
 
         // Sukuriame užsakymą
