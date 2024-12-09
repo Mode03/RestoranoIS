@@ -11,17 +11,26 @@
 
 <h2>Darbuotojo informacijos redagavimas</h2>
 
-<form th:action="@{/personnel-list/edit/save/{id}(id=${worker.Tab_nr})}" th:method="post" th:object="${worker}">
+<form th:action="@{/personnel-list/edit/save/{id}(id=${employee.idNaudotojas})}" th:method="post" th:object="${employee}">
 
     <div th:if="${error}" style="color: red;">
         <p th:text="${error}"></p>
     </div>
 
     <div>
-        <input type="hidden" name="Tab_nr" th:field="*{Tab_nr}" />
-        <label>Vardas: </label><input type="text" name="Name" th:value="${worker.Name}" />
-        <label>Pavardė: </label><input type="text" name="LastName" th:value="${worker.LastName}" />
-        <label>Adresas: </label><input type="text" name="Address" th:value="${worker.Address}" />
+        <input type="hidden" name="id" th:value="*{idNaudotojas}" />
+        <label>Vardas: </label><input type="text" name="vardas" th:field="*{user.vardas}" required/>
+        <label>Pavardė: </label><input type="text" name="pavarde" th:field="*{user.pavarde}" required/>
+        <label>Gimimo data: </label><input type="date" name="gimimodata" th:field="*{user.gimimoData}" required/>
+        <label>Pareigos </label><input type="text" name="pareigos" th:field="*{pareigos}" required/>
+        <label>El. Paštas: </label><input type="text" name="elPastas" th:field="*{user.elPastas}" required/>
+        <label>Alga: </label><input type="number" step="0.01" name="alga" th:field="*{alga}" required/>
+        <label>Telefonas: </label><input type="text" name="telefonas" th:field="*{telefonas}" required/>
+        <label>Adresas: </label><input type="text" name="adresas" th:field="*{adresas}" required/>
+        <label>Atostogų dienos: </label><input type="number" name="atostogos" th:field="*{atostoguDienos}" required/>
+        <label>Lytis: </label><input type="text" name="lytis" th:field="*{user.lytis}" required/>
+
+        <label>Slaptazodis: </label><input type="text" name="slaptazodis" th:field="*{user.slaptazodis}" required/>
     </div>
     <button style="border: 2px solid #04AA6D; width:76px;" class="view-button" type="submit">Išsaugoti</button>
 </form>
