@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Sukurti Naują Užsakymą</title>
@@ -11,30 +11,136 @@
 <h2>Sukurti Naują Užsakymą</h2>
 
 <div class="create-order-form">
-    <form>
+    <form class="order-form" action="#" th:action="@{/create-order}" method="post" th:object="${client}">
+
         <label for="username">Klientas:</label>
-        <input type="text" id="username" name="username" required>
+        <input type="text" id="username" th:field="*{slapyvardis}" readonly required>
 
-        <label for="orderDate">Užsakymo Data:</label>
-        <input type="date" id="orderDate" name="orderDate" required>
+        <label for="paymentType">Apmokėjimo tipas:</label>
+        <select id="paymentType" name="paymentTypeId" required>
+            <option value="" disabled selected>Pasirinkite apmokėjimo tipą</option>
+            <th:block th:each="paymentType : ${paymentTypes}">
+                <option th:value="${paymentType.id}" th:text="${paymentType.name}"></option>
+            </th:block>
+        </select><br><br>
 
-        <label for="paymentMethod">Mokėjimo Metodas:</label>
-        <select id="paymentMethod" name="paymentMethod">
-            <option value="card">Kortelė</option>
-            <option value="cash">Grynais</option>
-            <option value="bank_transfer">Banko pavedimas</option>
-        </select>
+        <label for="orderType">Užsakymo tipas:</label>
+        <select id="orderType" name="orderTypeId" required>
+            <option value="" disabled selected>Pasirinkite užsakymo tipą</option>
+            <th:block th:each="orderType : ${orderTypes}">
+                <option th:value="${orderType.id}" th:text="${orderType.name}"></option>
+            </th:block>
+        </select><br><br>
 
-        <label for="orderStatus">Užsakymo Būsena:</label>
-        <select id="orderStatus" name="orderStatus">
-            <option value="pending">Laukiama</option>
-            <option value="completed">Įvykdyta</option>
-            <option value="cancelled">Atšaukta</option>
-        </select>
+        <h3>Pasirinkti Patiekalai</h3>
+        <table id="dishes-table">
+            <thead>
+            <tr>
+                <th>Patiekalas</th>
+                <th>Kiekis</th>
+                <th>Aprašymas</th>
+                <th>Kaina (už vienetą)</th>
+                <th>Veiksmai</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="3">Bendra suma:</td>
+                <td id="total-price">0.00 €</td>
+                <td></td>
+            </tr>
+            </tfoot>
+        </table>
+        <button type="button" onclick="addDishRow()">Pridėti Patiekalą</button>
+        <br>
 
         <button type="submit">Sukurti Užsakymą</button>
     </form>
 </div>
+
+<script th:inline="javascript">
+    let dishes = JSON.parse(/*[[${dishesJson}]]*/ '[]');
+</script>
+
+<script>
+    function addDishRow() {
+        const table = document.getElementById('dishes-table').getElementsByTagName('tbody')[0];
+        const newRow = table.insertRow();
+
+        if (!Array.isArray(dishes)) {
+            console.error("Dishes is not an array:", dishes);
+            alert("Patiekalo duomenys negauti. Patikrinkite serverio atsakymą.");
+            return;
+        }
+
+        newRow.innerHTML = `
+    <td>
+        <select name="dishIds" onchange="updateRowDetails(this)" required>
+            <option value="" disabled selected>Pasirinkite patiekalą</option>
+            ${dishes.map(dish => `<option value="${dish.id}" data-price="${dish.kaina}" data-description="${dish.aprasymas}">${dish.pavadinimas}</option>`).join('')}
+        </select>
+    </td>
+    <td><input type="number" name="quantities" placeholder="Kiekis" min="1" required /></td>
+    <td class="dish-description">-</td>
+    <td class="dish-price">-</td>
+    <td><button type="button" onclick="removeRow(this)">Pašalinti</button></td>
+    `;
+    }
+
+    function removeRow(button) {
+        const row = button.closest('tr');
+        row.parentNode.removeChild(row);
+    }
+
+    function updateRowDetails(selectElement) {
+        const selectedOption = selectElement.options[selectElement.selectedIndex];
+        const row = selectElement.closest('tr');
+        const descriptionCell = row.querySelector('.dish-description');
+        const priceCell = row.querySelector('.dish-price');
+
+        if (selectedOption) {
+            // Atnaujinti aprašymą
+            if (selectedOption.dataset.description) {
+                descriptionCell.textContent = selectedOption.dataset.description;
+            } else {
+                descriptionCell.textContent = "-";
+            }
+
+            // Atnaujinti kainą
+            if (selectedOption.dataset.price) {
+                priceCell.textContent = parseFloat(selectedOption.dataset.price).toFixed(2) + " €";
+            } else {
+                priceCell.textContent = "-";
+            }
+        }
+    }
+
+    function updateTotalPrice() {
+        let total = 0;
+
+        document.querySelectorAll('#dishes-table tbody tr').forEach(row => {
+            const selectElement = row.querySelector('select[name="dishIds"]');
+            const quantityInput = row.querySelector('input[name="quantities"]');
+            const selectedOption = selectElement.options[selectElement.selectedIndex];
+
+            if (selectedOption && selectedOption.dataset.price && quantityInput.value) {
+                total += parseFloat(selectedOption.dataset.price) * parseInt(quantityInput.value, 10);
+            }
+        });
+
+        document.getElementById('total-price').textContent = total.toFixed(2) + " €";
+    }
+
+    // Atnaujinkite kiekvieną kartą keičiant patiekalo pasirinkimą arba kiekį
+    document.addEventListener('change', function (event) {
+        if (event.target.matches('select[name="dishIds"], input[name="quantities"]')) {
+            updateTotalPrice();
+        }
+    });
+
+</script>
 
 </body>
 </html>

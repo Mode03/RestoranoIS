@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.ui.Model;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
@@ -34,15 +33,20 @@ public class HomeController {
         this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
+    // Pagrindinis langas
     @GetMapping("")
     public String home(){
         return "main";
     }
 
-    // Pagrindinis langas
     @GetMapping("/main")
-    public String showMainPage() {
-        return "main";
+    // Pagrindinis langas
+    public String showMainPage(HttpSession session) {
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            return "redirect:/login"; // Redirect to login page if not logged in
+        }
+        return "main"; // Render the main page if user is logged in
     }
 
     //Prisijungimo langas
@@ -107,7 +111,6 @@ public class HomeController {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDate gimimoDataFormatted = LocalDate.parse(gimimoData, formatter);
 
-            System.out.println(miestas);
             String encodedPassword = passwordEncoder.encode(slaptazodis);
 
             // Sukuriame User objektą

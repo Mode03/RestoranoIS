@@ -1,46 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Generuota Ataskaita</title>
+    <title>Ataskaita</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-<div th:replace="~{fragments/navbar}"></div>
-<h2>Generuota Ataskaita</h2>
+<h2>Ataskaita</h2>
 
-<div class="report-summary">
-    <p><strong>Pradžios Data:</strong> <span th:text="${param.startDate}">2024-01-01</span></p>
-    <p><strong>Pabaigos Data:</strong> <span th:text="${param.endDate}">2024-12-31</span></p>
-    <p><strong>Mokėjimo Metodas:</strong> <span th:text="${param.paymentMethod}">Kortelė</span></p>
-    <p><strong>Užsakymo Būsena:</strong> <span th:text="${param.orderStatus}">Įvykdyta</span></p>
+<h3>Filtruoti Užsakymai</h3>
+<table>
+    <thead>
+    <tr>
+        <th>Užsakymo ID</th>
+        <th>Data</th>
+        <th>Bendra Suma</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="order : ${filteredOrders}">
+        <td th:text="${order.id}"></td>
+        <td th:text="${order.data}"></td>
+        <td th:text="${order.bendraSuma}"></td>
+    </tr>
+    </tbody>
+</table>
 
-    <h3>Užsakymų Sąrašas</h3>
-    <table>
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Vartotojas</th>
-            <th>Data</th>
-            <th>Būsena</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td>1</td>
-            <td>Jonas</td>
-            <td>2024-11-01</td>
-            <td>Įvykdyta</td>
-        </tr>
-        <tr>
-            <td>2</td>
-            <td>Ona</td>
-            <td>2024-11-02</td>
-            <td>Laukiama</td>
-        </tr>
+<h3>Patiekalų Statistikos</h3>
+<table>
+    <thead>
+    <tr>
+        <th>Patiekalo Pavadinimas</th>
+        <th>Kiekis</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="entry : ${dishSummary}">
+        <td th:text="${entry.key}"></td>
+        <td th:text="${entry.value}"></td>
+    </tr>
+    </tbody>
+</table>
 
-        </tbody>
-    </table>
-</div>
+<h3>Visų Užsakymų Bendra Suma</h3>
+<p th:text="'Bendra suma: ' + ${totalOrderSum} + ' €'"></p>
+
 </body>
 </html>

@@ -2,19 +2,47 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Užsakymo Peržiūra</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 <div th:replace="~{fragments/navbar}"></div>
+
 <h2>Užsakymo Peržiūra</h2>
 <div class="container">
-    <div class="edit-order">
-        <p><strong>Klientas:</strong> Vardenis</p>
-        <p><strong>Užsakymo data:</strong> 2024-11-01</p>
-        <p><strong>Mokėjimo metodas:</strong> Kortele</p>
-        <p><strong>Užsakymo būsena:</strong> Vykdoma</p>
+    <div class="order-details">
+        <p><strong>Klientas:</strong> <span th:text="${order.client.slapyvardis}">Vardenis</span></p>
+        <p><strong>Užsakymo data:</strong> <span th:text="${order.data}">2024-11-01</span></p>
+        <p><strong>Mokėjimo metodas:</strong> <span th:text="${order.paymentType.name}">Kortele</span></p>
+        <p><strong>Užsakymo būsena:</strong> <span th:text="${order.statusType.name}">Vykdoma</span></p>
+        <p><strong>Užsakymo suma:</strong> <span th:text="${order.getBendraSuma()}"></span></p>
+    </div>
+
+    <h3>Užsakymo Patiekalai</h3>
+    <table>
+        <thead>
+        <tr>
+            <th>Pavadinimas</th>
+            <th>Aprašymas</th>
+            <th>Kiekis</th>
+            <th>Kaina (už vienetą)</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="orderDish : ${orderDishes}">
+            <td th:text="${orderDish.dish.pavadinimas}">Patiekalas</td>
+            <td th:text="${orderDish.dish.aprasymas}">Aprašymas</td>
+            <td th:text="${orderDish.kiekis}">Kiekis</td>
+            <td th:text="${orderDish.dish.kaina}">Kaina</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="actions">
+        <a href="/orders" class="edit-link">Grįžti</a>
     </div>
 </div>
+
 </body>
 </html>

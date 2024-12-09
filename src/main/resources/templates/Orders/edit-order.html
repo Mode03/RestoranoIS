@@ -1,23 +1,162 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Užsakymo Redagavimas</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 <div th:replace="~{fragments/navbar}"></div>
+
 <h2>Užsakymo Redagavimas</h2>
 <form action="/edit-order" method="post">
+    <input type="hidden" name="id" th:value="${order.id}">
+
     <label for="username">Klientas:</label>
-    <input type="text" id="username" name="username" required value="Vardenis">
+    <input type="text" id="username" name="username" th:value="${order.client.slapyvardis}" required>
+
     <label for="date">Data:</label>
-    <input type="date" id="date" name="date" required>
-    <label for="payment">Mokejimo metodas:</label>
-    <input type="number" id="payment" name="payment" required value="15.56">
-    <label for="status">Užsakymo būsena:</label>
-    <input type="text" id="status" name="status" required value="Vykdoma">
+    <input type="date" id="date" name="date" th:value="${order.data}" required>
+
+    <label for="paymentTypeId">Mokėjimo metodas:</label>
+    <select id="paymentTypeId" name="paymentTypeId" required>
+        <option th:each="paymentType : ${paymentTypes}" th:value="${paymentType.id}" th:text="${paymentType.name}" th:selected="${paymentType.id == order.paymentType.id}"></option>
+    </select>
+
+    <label for="orderTypeId">Užsakymo tipas:</label>
+    <select id="orderTypeId" name="orderTypeId" required>
+        <option th:each="orderType : ${orderTypes}" th:value="${orderType.id}" th:text="${orderType.name}" th:selected="${orderType.id == order.orderType.id}"></option>
+    </select>
+
+    <h3>Redaguoti Patiekalus</h3>
+    <table id="dishes-table">
+        <thead>
+        <tr>
+            <th>Patiekalas</th>
+            <th>Kiekis</th>
+            <th>Aprašymas</th>
+            <th>Kaina (už vienetą)</th>
+            <th>Veiksmai</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="orderDish : ${orderDishes}">
+            <td>
+                <input type="hidden" name="dishIds" th:value="${orderDish.dish.id}" />
+                <span th:text="${orderDish.dish.pavadinimas}"></span>
+            </td>
+            <td>
+                <input type="number" name="quantities" th:value="${orderDish.kiekis}" min="1" required onchange="updateTotalPrice()" />
+            </td>
+            <td class="dish-description" th:text="${orderDish.dish.aprasymas}"></td>
+            <td class="dish-price" th:text="${orderDish.dish.kaina + ' €'}"></td>
+            <td>
+                <button type="button" onclick="removeRow(this)">Pašalinti</button>
+            </td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="3">Bendra suma:</td>
+            <td id="total-price">0.00 €</td>
+            <td></td>
+        </tr>
+        </tfoot>
+
+    </table>
+    <button type="button" onclick="addDishRow()">Pridėti Patiekalą</button>
+    <br>
+
     <button type="submit">Išsaugoti</button>
+    <a href="/orders" class="cancel-link">Atšaukti</a>
 </form>
+
+<script th:inline="javascript">
+    let dishes = JSON.parse(/*[[${dishesJson}]]*/ '[]');
+</script>
+
+<script>
+
+    // Funkcija atnaujinti bendrą užsakymo sumą
+    function updateTotalPrice() {
+        let total = 0;
+
+        document.querySelectorAll('#dishes-table tbody tr').forEach(row => {
+            const quantityInput = row.querySelector('input[name="quantities"]');
+            const priceSpan = row.querySelector('.dish-price');
+
+            if (priceSpan && quantityInput && quantityInput.value) {
+                const price = parseFloat(priceSpan.textContent.replace('€', '').trim());
+                const quantity = parseInt(quantityInput.value, 10);
+                total += price * quantity;
+            }
+        });
+
+        document.getElementById('total-price').textContent = total.toFixed(2) + " €";
+    }
+
+    // Funkcija pašalinti eilutę
+    function removeRow(button) {
+        const row = button.closest('tr');
+        row.parentNode.removeChild(row);
+        updateTotalPrice(); // Atnaujinti bendrą sumą po pašalinimo
+    }
+
+    // Dinamiškai pridėti naują eilutę
+    function addDishRow() {
+        const table = document.getElementById('dishes-table').getElementsByTagName('tbody')[0];
+        const newRow = table.insertRow();
+
+        if (!Array.isArray(dishes)) {
+            console.error("Dishes is not an array:", dishes);
+            alert("Patiekalo duomenys negauti. Patikrinkite serverio atsakymą.");
+            return;
+        }
+
+        newRow.innerHTML = `
+    <td>
+        <select name="dishIds" onchange="updateRowDetails(this)" required>
+            <option value="" disabled selected>Pasirinkite patiekalą</option>
+            ${dishes.map(dish => `<option value="${dish.id}" data-price="${dish.kaina}" data-description="${dish.aprasymas}">${dish.pavadinimas}</option>`).join('')}
+        </select>
+    </td>
+    <td><input type="number" name="quantities" placeholder="Kiekis" min="1" required onchange="updateTotalPrice()" /></td>
+    <td class="dish-description">-</td>
+    <td class="dish-price">-</td>
+    <td><button type="button" onclick="removeRow(this)">Pašalinti</button></td>
+    `;
+    }
+
+    // Atnaujinti eilutės detales pasirinkus patiekalą
+    function updateRowDetails(selectElement) {
+        const selectedOption = selectElement.options[selectElement.selectedIndex];
+        const row = selectElement.closest('tr');
+        const descriptionCell = row.querySelector('.dish-description');
+        const priceCell = row.querySelector('.dish-price');
+
+        if (selectedOption) {
+            descriptionCell.textContent = selectedOption.dataset.description || "-";
+            priceCell.textContent = selectedOption.dataset.price ? parseFloat(selectedOption.dataset.price).toFixed(2) + " €" : "-";
+        }
+
+        updateTotalPrice();
+    }
+
+    // Inicializuoti bendrą kainą redagavimo metu
+    document.addEventListener('DOMContentLoaded', () => {
+        updateTotalPrice();
+    });
+
+    // Pridėti bendros sumos atnaujinimą kiekvienam kiekio ar patiekalo pasirinkimo pakeitimui
+    document.addEventListener('change', function (event) {
+        if (event.target.matches('select[name="dishIds"], input[name="quantities"]')) {
+            updateTotalPrice();
+        }
+    });
+</script>
+
+
+
 </body>
 </html>
