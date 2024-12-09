@@ -2,11 +2,12 @@ package com.example.RestoranoIS.Controllers;
 
 import com.example.RestoranoIS.Models.City;
 import com.example.RestoranoIS.Models.User;
-import com.example.RestoranoIS.Models.Worker;
 import com.example.RestoranoIS.Models.Employee;
 import com.example.RestoranoIS.Repositories.CityRepository;
 import com.example.RestoranoIS.Repositories.UserRepository;
-import org.springframework.beans.factory.parsing.EmptyReaderEventListener;
+import com.example.RestoranoIS.Services.UserService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 //JPA REQUIRED
@@ -20,14 +21,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.time.LocalDate;
-
-//TODO: TURBUT REIKS ECNRYPTINTI SLAPTAZODI? KAI SUKURIU VARTOTOJA
 
 @Controller
 public class PersonnelController {
@@ -35,6 +31,8 @@ public class PersonnelController {
     @Autowired private EmployeeRepository employeeRepository;
     @Autowired private UserRepository userRepository;
     @Autowired private CityRepository cityRepository;
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
     @GetMapping("/personnel-list")
     public String showPersonnelList(Model model) {
         List<Employee> employees = employeeRepository.findAll();
@@ -92,16 +90,17 @@ public class PersonnelController {
     public String submitCreatedPersonnel(@ModelAttribute("employee") Employee employee, Model model){
         employee.setNuoKadaDirba(LocalDate.now());
         User user = employee.getUser();
+        String encodedPassword = passwordEncoder.encode(user.getSlaptazodis());
+        user.setSlaptazodis(encodedPassword);
         userRepository.save(user);
-        userRepository.flush();
 
-        employeeRepository.insertEmployee(employee.getAdresas(), employee.getAlga(), employee.getAsmensKodas(),
-                employee.getAtostoguDienos(), employee.getMiestas().getId(), employee.getNuoKadaDirba(),
-                employee.getPareigos(), employee.getTelefonas(), employee.getUser().getId());
+        //employeeRepository.insertEmployee(employee.getAdresas(), employee.getAlga(), employee.getAsmensKodas(),
+        //        employee.getAtostoguDienos(), employee.getMiestas().getId(), employee.getNuoKadaDirba(),
+        //        employee.getPareigos(), employee.getTelefonas(), employee.getUser().getId());
 
-        //employee.setUser(user);
-        //employee.setIdNaudotojas(user.getId());
-        //employeeRepository.save(employee);
+        employee.setUser(user);
+        employee.setIdNaudotojas(user.getId());
+        employeeRepository.save(employee);
         return "redirect:/personnel-list";
     }
 
