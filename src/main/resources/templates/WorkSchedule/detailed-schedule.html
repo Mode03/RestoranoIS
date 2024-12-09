@@ -9,18 +9,32 @@
 <body>
 <div th:insert="~{fragments/navbar}"></div>
 <div class="container">
-    <h1>Darbo Grafikas - Savaitė <span th:text="${weekNumber}"></span></h1>
+    <h1>Darbo Grafikas - Savaitė <span th:text="${id}"></span></h1>
 
-    <div class="container">
-        <div class="edit-order" th:each="entry, iter : ${schedule}">
-            <p th:text="${entry}" class="week-header"></p>
-        </div>
-    </div>
+    <table class="schedule-table">
+        <thead>
+        <tr>
+            <th>Darbuotojas</th>
+            <th>Diena</th>
+            <th>Pradžios Laikas</th>
+            <th>Pabaigos Laikas</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="detail : ${scheduleDetails}">
+            <td th:text="${detail.employeeName}"></td>
+            <td th:text="${detail.workDay}"></td>
+            <td th:text="${detail.startTime != null ? #temporals.format(detail.startTime, 'yyyy-MM-dd HH:mm') : 'N/A'}"></td>
+            <td th:text="${detail.endTime != null ? #temporals.format(detail.endTime, 'yyyy-MM-dd HH:mm') : 'N/A'}"></td>
+
+        </tr>
+
+        </tbody>
+    </table>
 
     <form action="/work-schedule" method="get" class="back-form">
         <button class="submit-button">Grįžti į savaitės apžvalgą</button>
     </form>
 </div>
-
 </body>
 </html>
