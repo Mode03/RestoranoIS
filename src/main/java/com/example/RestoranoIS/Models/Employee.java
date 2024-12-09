@@ -15,7 +15,6 @@ import java.util.Date;
 @Table(name = "DARBUOTOJAI")
 public class Employee {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_Naudotojas", nullable = false)
     private Integer idNaudotojas; // Foreign key į NAUDOTOJAI ID
 
