@@ -1,7 +1,18 @@
 package com.example.RestoranoIS.Controllers;
 
+import com.example.RestoranoIS.Models.City;
+import com.example.RestoranoIS.Models.User;
 import com.example.RestoranoIS.Models.Worker;
+import com.example.RestoranoIS.Models.Employee;
+import com.example.RestoranoIS.Repositories.CityRepository;
+import com.example.RestoranoIS.Repositories.UserRepository;
+import org.springframework.beans.factory.parsing.EmptyReaderEventListener;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+//JPA REQUIRED
+import com.example.RestoranoIS.Repositories.EmployeeRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+//JPA REQUIRED
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -9,82 +20,133 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import java.time.LocalDate;
 
+//TODO: TURBUT REIKS ECNRYPTINTI SLAPTAZODI? KAI SUKURIU VARTOTOJA
 
 @Controller
 public class PersonnelController {
-    ArrayList<Worker> workersTest = new ArrayList<>();
-    int lastIndex = 0;
 
+    @Autowired private EmployeeRepository employeeRepository;
+    @Autowired private UserRepository userRepository;
+    @Autowired private CityRepository cityRepository;
+    ArrayList<Worker> workersTest;
+    int lastIndex = 0;
     @GetMapping("/personnel-list")
     public String showPersonnelList(Model model) {
-        model.addAttribute("workers", workersTest);
+        List<Employee> employees = employeeRepository.findAll();
+        model.addAttribute("employees",employees);
         return "Personnel/personnel-list";
     }
 
     @GetMapping("/personnel-list/view/{id}")
     public String viewPersonnelInfo(@PathVariable int id, Model model){
-//        model.addAttribute(getWorkerbyId(id));
-        model.addAttribute(workersTest.get(getWorkerIndex(id)));
+        Optional<Employee> optionalEmployee = employeeRepository.findById(id);
+        if (optionalEmployee.isPresent()) {
+            model.addAttribute("employee", optionalEmployee.get());
+        } else {
+            throw new IllegalArgumentException("Employee not found with ID: " + id);
+        }
         return "Personnel/view-personnel";
     }
     @GetMapping("/personnel-list/edit/{id}")
     public String editPersonnelInfo(@PathVariable int id, Model model){
-        model.addAttribute(workersTest.get(getWorkerIndex(id)));
+        Optional<Employee> optionalEmployee = employeeRepository.findById(id);
+        if (optionalEmployee.isPresent()) {
+            model.addAttribute("employee", optionalEmployee.get());
+        } else {
+            throw new IllegalArgumentException("Employee not found with ID: " + id);
+        }
         return "Personnel/edit-personnel";
     }
 
     @GetMapping("/personnel-list/edit/delete/confirm/{id}")
     public String confirmDeletePersonnel(@PathVariable int id, Model model){
-        model.addAttribute(workersTest.get(getWorkerIndex(id)));
+        Optional<Employee> optionalEmployee = employeeRepository.findById(id);
+        if (optionalEmployee.isPresent()) {
+            model.addAttribute("employee", optionalEmployee.get());
+        } else {
+            throw new IllegalArgumentException("Employee not found with ID: " + id);
+        }
         return "Personnel/delete-personnel";
     }
 
     @GetMapping("/personnel-list/create")
-    public String createPersonnel(){
+    public String createPersonnel(Model model){
+        Employee employee = new Employee();
+
+        User user = new User();
+        employee.setUser(user);
+        List<City> cities = cityRepository.findAll();
+        model.addAttribute("cities", cities);
+        model.addAttribute("employee", employee);
+        model.addAttribute("user", user);
         return "Personnel/create-personnel";
     }
 
     @PostMapping("/personnel-list/create/submit")
-    public String submitCreatedPersonnel(@RequestParam("Name") String name,
-                                         @RequestParam("LastName") String lastName,
-                                         @RequestParam("Address") String address,
-                                         Model model){
+    @Transactional
+    public String submitCreatedPersonnel(@ModelAttribute("employee") Employee employee, Model model){
+        employee.setNuoKadaDirba(LocalDate.now());
+        User user = employee.getUser();
+        userRepository.save(user);
+        userRepository.flush();
 
-        //ArrayList<Worker> workers = getWorkers();
-        Worker worker = new Worker(lastIndex, name, lastName, address);
-        lastIndex++;
-        workersTest.add(worker);
-        model.addAttribute("workers", workersTest);
-        return "Personnel/personnel-list";
+        employeeRepository.insertEmployee(employee.getAdresas(), employee.getAlga(), employee.getAsmensKodas(),
+                employee.getAtostoguDienos(), employee.getMiestas().getId(), employee.getNuoKadaDirba(),
+                employee.getPareigos(), employee.getTelefonas(), employee.getUser().getId());
+
+        //employee.setUser(user);
+        //employee.setIdNaudotojas(user.getId());
+        //employeeRepository.save(employee);
+        return "redirect:/personnel-list";
     }
 
     @GetMapping("/personnel-list/edit/delete/{id}")
-    public String deletePersonnel(@PathVariable int id, Model model){
-        int index = getWorkerIndex(id);
-        workersTest.remove(index);
-        model.addAttribute("workers", workersTest);
-        return "Personnel/personnel-list";
+    public String deletePersonnel(@PathVariable int id){
+        Optional<Employee> employee = employeeRepository.findById(id);
+        if (employee.isPresent()) {
+            // Delete the employee
+            employeeRepository.deleteById(id);
+        }
+        return "redirect:/personnel-list";
     }
 
     @PostMapping("/personnel-list/edit/save/{id}")
-    public String savePersonnelInfo(@PathVariable int id,
-                                    @RequestParam("Tab_nr") Integer tabNr,
-                                    @RequestParam("Name") String name,
-                                    @RequestParam("LastName") String lastName,
-                                    @RequestParam("Address") String address,
-                                    Model model){
-        Worker worker = new Worker(tabNr, name, lastName, address);
-        if (tabNr == null || name.isEmpty() || lastName.isEmpty() || address.isEmpty()) {
-            model.addAttribute("error", "Reikia užpildyti visus laukus.");
+    public String savePersonnelInfo(@ModelAttribute("employee") Employee employee, Model model, @PathVariable int id){
+        Optional<Employee> optionalEmployee = employeeRepository.findById(id);
+        if (optionalEmployee.isPresent()) {
+            Optional<User> optionalUser = userRepository.findById(id);
+            if (optionalUser.isPresent()) {
+                User existingUser = optionalUser.get();
+                User employeeUser = employee.getUser();
+                existingUser.setVardas(employeeUser.getVardas());
+                existingUser.setPavarde(employeeUser.getPavarde());
+                existingUser.setElPastas(employeeUser.getElPastas());
+                existingUser.setLytis(employeeUser.getLytis());
+                existingUser.setSlaptazodis(employeeUser.getSlaptazodis());
 
-            model.addAttribute(worker);
-            return "Personnel/edit-personnel";
+                userRepository.save(existingUser);
+            } else {
+                throw new IllegalArgumentException("Employee not found with ID: " + id);
+            }
+
+            Employee existingEmployee = optionalEmployee.get();
+            existingEmployee.setAdresas(employee.getAdresas());
+            existingEmployee.setAlga(employee.getAlga());
+            existingEmployee.setTelefonas(employee.getTelefonas());
+            existingEmployee.setAtostoguDienos(employee.getAtostoguDienos());
+            employeeRepository.save(existingEmployee);
+            model.addAttribute("employee", existingEmployee);
+        } else {
+            throw new IllegalArgumentException("Employee not found with ID: " + id);
         }
-        workersTest.set(getWorkerIndex(id), worker);
-        model.addAttribute("worker", worker);
-        return "Personnel/view-personnel";
+        return "redirect:/personnel-list/view/{id}";
     }
 
     @GetMapping("/personnel-list/salary")

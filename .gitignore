@@ -4,6 +4,9 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+### KAD KIEKVIENAS JUNGTUS PRIE SAVO DB AAAAAAAAAAA ###
+application.properties
+
 ### STS ###
 .apt_generated
 .classpath
