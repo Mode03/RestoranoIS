@@ -1,17 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Produktų Sąrašas</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
 <!-- Navigation bar -->
-<div th:replace="~{fragments/navbar}"></div>
+<div th:insert="~{fragments/navbar}"></div>
+
 <div>
     <button type="button" onclick="window.location.href='/products/create'">Pildyti produktus</button>
     <button type="button" onclick="window.location.href='/products/order'">Užsakyti produktus</button>
-    <button type="button" onclick="window.location.href='/products/delete'">Šalinti produktus</button>
     <button type="button" onclick="window.location.href='/products/categories'">Produktai pagal kategoriją</button>
 </div>
 
@@ -23,41 +24,28 @@
         <th>ID</th>
         <th>Pavadinimas</th>
         <th>Kiekis</th>
+        <th>Kategorija</th>
+        <th colspan="2">Veiksmai</th>
     </tr>
     </thead>
     <tbody>
-    <tr>
-        <td>1</td>
-        <td>Pomidoras</td>
-        <td>10</td>
-    </tr>
-    <tr>
-        <td>2</td>
-        <td>Agurkas</td>
-        <td>10</td>
-    </tr>
-    <tr>
-        <td>3</td>
-        <td>Pupelės</td>
-        <td>5</td>
-    </tr>
-    <tr>
-        <td>4</td>
-        <td>Baklažanas</td>
-        <td>20</td>
-    </tr>
-    <tr>
-        <td>5</td>
-        <td>Krienas</td>
-        <td>20</td>
-    </tr>
-    <tr>
-        <td>6</td>
-        <td>Svogūnas</td>
-        <td>20</td>
+    <!-- Dynamically populate rows using Thymeleaf -->
+    <tr th:each="product : ${products}">
+        <td th:text="${product.id}"></td>
+        <td th:text="${product.pavadinimas}"></td>
+        <td th:text="${product.kiekis}"></td>
+        <td th:text="${product.kategorija.name}"></td>
+        <td>
+            <button th:onclick="|window.location='@{/products/edit/{id}(id=${product.id})}'|" style="border: 2px solid #0609c7; width:76px;" class="modify-button">Redaguoti</button>
+        </td>
+        <td>
+            <button th:onclick="|window.location='@{/products/delete/confirm/{id}(id=${product.id})}'|" style="border: 2px solid #c20615; width:76px;" class="modify-button">Ištrinti</button>
+        </td>
     </tr>
     </tbody>
 </table>
+
+<a th:href="@{/products}" class="back-button">Atgal į produktų sąrašą</a>
 
 </body>
 </html>

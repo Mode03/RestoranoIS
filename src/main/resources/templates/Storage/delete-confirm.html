@@ -1,17 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Produkto Pašalinimas</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-<div th:replace="~{fragments/navbar}"></div>
+<div th:insert="~{fragments/navbar}"></div>
+
 <h2>Patvirtinti Produkto Pašalinimą</h2>
+
 <div class="center-actions">
     <p>Ar tikrai norite pašalinti šį produktą?</p>
-    <button onclick="window.location.href='/products'" class="delete-button">Taip, pašalinti</button>
-    <a href="/products" class="cancel-link">Atšaukti</a>
+    <p><strong>ID:</strong> <span th:text="${product.id}"></span></p>
+    <p><strong>Pavadinimas:</strong> <span th:text="${product.pavadinimas}"></span></p>
+    <p><strong>Kiekis:</strong> <span th:text="${product.kiekis}"></span></p>
+
+    <form th:action="@{/products/delete/{id}(id=${product.id})}" method="post">
+        <button type="submit" class="delete-button">Taip, pašalinti</button>
+    </form>
+    <a th:href="@{/products}" class="cancel-link">Atšaukti</a>
 </div>
+
 </body>
 </html>

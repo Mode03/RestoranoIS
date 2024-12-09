@@ -1,77 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Produktų Užsakymas</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
 <!-- Navigation bar -->
-<div th:replace="~{fragments/navbar}"></div>
+<div th:insert="~{fragments/navbar}"></div>
 
 <h2>Produktų Užsakymas</h2>
 
-<table>
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Pavadinimas</th>
-        <th>Dabartinis kiekis</th>
-        <th>Kiek pirkti</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td>1</td>
-        <td>Pomidoras</td>
-        <td>10</td>
-        <td><input type="number"></td>
+<form th:action="@{/products/order/submit}" th:object="${order}" th:method="post">
+    <div th:if="${error}" style="color: red;">
+        <p th:text="${error}"></p>
+    </div>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Pavadinimas</th>
+            <th>Dabartinis Kiekis</th>
+            <th>Kiek Užsakyti</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Dynamically populate rows using Thymeleaf -->
+        <tr th:each="product : ${order.products}">
+            <td th:text="*{product.id}"></td>
+            <td th:text="*{product.pavadinimas}"></td>
+            <td th:text="*{product.kiekis}"></td>
+            <td><input type="number" th:field="*{product.orderQuantity}" min="0" required></td>
+        </tr>
+        </tbody>
+    </table>
 
-    </tr>
-    <tr>
-        <td>2</td>
-        <td>Agurkas</td>
-        <td>10</td>
-        <td><input type="number"></td>
+    <button style="border: 2px solid #04AA6D; width:76px;" class="view-button" type="submit">Užsakyti</button>
+</form>
 
-    </tr>
-    <tr>
-        <td>3</td>
-        <td>Pupelės</td>
-        <td>5</td>
-        <td><input type="number"></td>
-
-    </tr>
-    <tr>
-        <td>4</td>
-        <td>Baklažanas</td>
-        <td>20</td>
-        <td><input type="number"></td>
-    </tr>
-    <tr>
-        <td>5</td>
-        <td>Krienas</td>
-        <td>20</td>
-        <td><input type="number"></td>
-    </tr>
-    <tr>
-        <td>6</td>
-        <td>Svogūnas</td>
-        <td>20</td>
-        <td><input type="number"></td>
-    </tr>
-    <tr>
-        <td colspan="4">
-            <button onclick="window.location.href='/products'">Užsakyti</button>
-        </td>
-    </tr>
-    </tbody>
-
-</table>
-
-<div class="center-actions">
-    <button onclick="window.location.href='/products'">Gryžti į sarašą</button>
-</div>
+<a th:href="@{/products}">Atgal į produktų sąrašą</a>
 
 </body>
 </html>

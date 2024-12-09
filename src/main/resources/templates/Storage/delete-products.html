@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Produktų Sąrašas</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
 <!-- Navigation bar -->
-<div th:replace="~{fragments/navbar}"></div>
+<div th:insert="~{fragments/navbar}"></div>
 
 <h2>Produktų Sąrašas</h2>
 
@@ -16,42 +17,20 @@
     <tr>
         <th>ID</th>
         <th>Pavadinimas</th>
-        <th></th>
+        <th>Veiksmai</th>
     </tr>
     </thead>
     <tbody>
-    <tr>
-        <td>1</td>
-        <td>Pomidoras</td>
-        <td><button type="button" onclick="window.location.href='/products/delete-confirm'">Naikinti</button></td>
-
-    </tr>
-    <tr>
-        <td>2</td>
-        <td>Agurkas</td>
-        <td><button type="button" onclick="window.location.href='/products/delete-confirm'">Naikinti</button></td>
-
-    </tr>
-    <tr>
-        <td>3</td>
-        <td>Pupelės</td>
-        <td><button type="button" onclick="window.location.href='/products/delete-confirm'">Naikinti</button></td>
-
-    </tr>
-    <tr>
-        <td>4</td>
-        <td>Baklažanas</td>
-        <td><button type="button" onclick="window.location.href='/products/delete-confirm'">Naikinti</button></td>
-    </tr>
-    <tr>
-        <td>5</td>
-        <td>Krienas</td>
-        <td><button type="button" onclick="window.location.href='/products/delete-confirm'">Naikinti</button></td>
-    </tr>
-    <tr>
-        <td>6</td>
-        <td>Svogūnas</td>
-        <td><button type="button" onclick="window.location.href='/products/delete-confirm'">Naikinti</button></td>
+    <!-- Dynamically populate rows using Thymeleaf -->
+    <tr th:each="product : ${products}">
+        <td th:text="${product.id}"></td>
+        <td th:text="${product.pavadinimas}"></td>
+        <td>
+            <button type="button"
+                    th:onclick="|window.location.href='@{/products/delete-confirm/{id}(id=${product.id})}'|">
+                Naikinti
+            </button>
+        </td>
     </tr>
     </tbody>
 </table>

@@ -1,33 +1,39 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Produktų Papildymas</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
 <!-- Navigation bar -->
-<div th:replace="~{fragments/navbar}"></div>
+<div th:insert="~{fragments/navbar}"></div>
 
 <h2>Produktų Papildymas</h2>
-<form>
+
+<form th:action="@{/products/create}" th:object="${product}" method="post">
     <div>
-        <label>Pavadinimas: </label><input type="text" name="Name"/>
+        <label>Pavadinimas: </label>
+        <input type="text" th:field="*{pavadinimas}" placeholder="Įveskite pavadinimą" required />
+
         <label>Kategorija: </label>
-        <select name="Category" id="Category">
-            <option value="Fruits">Vaisius</option>
-            <option value="Vegetables">Daržovė</option>
-            <option value="Meat">Mėsa</option>
-            <option value="Drinks">Gėrimas</option>
+        <select th:field="*{kategorija.id}" required>
+            <option th:each="category : ${categories}"
+                    th:value="${category.id}"
+                    th:text="${category.name}">
+            </option>
         </select>
+
+        <label>Kiekis: </label>
+        <input type="number" th:field="*{kiekis}" min="1" placeholder="Įveskite kiekį" required />
     </div>
 
-    <button onclick="window.location.href='/products'">Papildyti</button>
+    <button type="submit" style="border: 2px solid #04AA6D; width:100px;">Papildyti</button>
 </form>
 
-
 <div class="center-actions">
-    <button onclick="window.location.href='/products'">Gryžti į sarašą</button>
+    <a th:href="@{/products}" class="back-link">Gryžti į sarašą</a>
 </div>
 
 </body>
