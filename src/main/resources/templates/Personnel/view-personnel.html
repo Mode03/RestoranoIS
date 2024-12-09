@@ -13,30 +13,39 @@
 <table>
     <thead>
     <tr>
-        <th>Tab Nr</th>
+        <th>ID</th>
         <th>Vardas</th>
-        <th>Pavardė</th>
+        <th>Pavarde</th>
+        <th>Asmens Kodas</th>
+        <th>Pareigos</th>
+        <th>Darbo Pradžia</th>
+        <th>Alga</th>
+        <th>Telefonas</th>
         <th>Adresas</th>
+        <th>Atostogų Dienos</th>
+        <th>Miestas</th>
         <th colspan="2">Veiksmai</th>
     </tr>
     </thead>
     <tbody>
     <tr>
-        <td th:text="${worker.Tab_nr}"></td>
-        <td th:text="${worker.Name}"></td>
-        <td th:text="${worker.LastName}"></td>
-        <td th:text="${worker.Address}"></td>
+        <td th:text="${employee.idNaudotojas}"></td>
+        <td th:text="${employee.user.vardas}"></td>
+        <td th:text="${employee.user.pavarde}"></td>
+        <td th:text="${employee.asmensKodas}"></td>
+        <td th:text="${employee.pareigos}"></td>
+        <td th:text="${#temporals.format(employee.nuoKadaDirba, 'yyyy-MM-dd')}"></td>
+        <td th:text="${employee.alga}"></td>
+        <td th:text="${employee.telefonas}"></td>
+        <td th:text="${employee.adresas}"></td>
+        <td th:text="${employee.atostoguDienos}"></td>
+        <td th:text="${employee.miestas?.pavadinimas}"></td>
         <td>
-            <button th:onclick="|window.location='@{/personnel-list/edit/{id}(id=${worker.Tab_nr})}'|" style="border: 2px solid #0609c7; width:76px;" class="modify-button">Redaguoti</button>
+            <button th:onclick="|window.location='@{/personnel-list/edit/{id}(id=${employee.idNaudotojas})}'|" style="border: 2px solid #0609c7; width:76px;" class="modify-button">Redaguoti</button>
         </td>
         <td>
-            <button th:onclick="|window.location='@{/personnel-list/edit/delete/confirm/{id}(id=${worker.Tab_nr})}'|" style="border: 2px solid #c20615; width:76px;" class="modify-button">Ištrinti</button>
+            <button th:onclick="|window.location='@{/personnel-list/edit/delete/confirm/{id}(id=${employee.idNaudotojas})}'|" style="border: 2px solid #c20615; width:76px;" class="modify-button">Ištrinti</button>
         </td>
-<!--        <form th:action="@{/personnel-list/edit/delete/{id}(id=${worker.Tab_nr})}" th:method="post">-->
-<!--            <td>-->
-<!--                <button style="border: 2px solid #c20615; width:76px;" type="submit" class="delete-button">Ištrinti</button>-->
-<!--            </td>-->
-<!--        </form>-->
     </tr>
     </tbody>
 </table>

@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Getter
@@ -14,8 +15,15 @@ import java.util.Date;
 @Table(name = "DARBUOTOJAI")
 public class Employee {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_Naudotojas", nullable = false)
     private Integer idNaudotojas; // Foreign key į NAUDOTOJAI ID
+
+    @Getter
+    @Setter
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_Naudotojas")
+    private User user;
 
     @Column(name = "asmens_kodas", nullable = false)
     private String asmensKodas;
@@ -24,7 +32,7 @@ public class Employee {
     private String pareigos;
 
     @Column(name = "nuo_kada_dirba", nullable = false)
-    private Date nuoKadaDirba;
+    private LocalDate nuoKadaDirba;
 
     @Column(name = "alga", nullable = false)
     private double alga;
@@ -49,7 +57,7 @@ public class Employee {
         this.idNaudotojas = idNaudotojas;
         this.asmensKodas = asmensKodas;
         this.pareigos = pareigos;
-        this.nuoKadaDirba = new Date();
+        this.nuoKadaDirba = LocalDate.now();
         this.alga = 0;
         this.telefonas = telefonas;
         this.adresas = adresas;
