@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Užsakymų Sąrašas</title>
@@ -7,45 +7,43 @@
 </head>
 <body>
 <!-- Navigation bar -->
-<div th:replace="~{fragments/navbar}"></div>
+<div th:insert="~{fragments/navbar}"></div>
 
 <h2>Užsakymų Sąrašas</h2>
 
 <table>
     <thead>
     <tr>
-        <th>ID</th>
-        <th>Vartotojo Vardas</th>
-        <th>Užsakymo Data</th>
+        <th>Užsakymo ID</th>
+        <th>Klientas</th>
+        <th>Data</th>
+        <th>Bendra suma</th>
+        <th>Apmokėjimas</th>
+        <th>Būsena</th>
+        <th>Tipas</th>
         <th>Veiksmai</th>
     </tr>
     </thead>
     <tbody>
-    <tr>
-        <td>1</td>
-        <td>vartotojas1</td>
-        <td>2023-11-01</td>
+    <tr th:each="order : ${orders}">
+        <td th:text="${order.id}"></td>
+        <td th:text="${order.client.slapyvardis}"></td>
+        <td th:text="${order.data}"></td>
+        <td th:text="${order.bendraSuma}"></td>
+        <td th:text="${order.paymentType.name}"></td>
+        <td th:text="${order.statusType.name}"></td>
+        <td th:text="${order.orderType.name}"></td>
         <td>
-            <button type="button" onclick="window.location.href='/view-order'">Peržiūrėti</button>
-            <button type="button" onclick="window.location.href='/edit-order'">Redaguoti</button>
-            <button type="button" onclick="window.location.href='/delete-order'">Atšaukti</button>
-        </td>
-    </tr>
-    <tr>
-        <td>2</td>
-        <td>vartotojas2</td>
-        <td>2023-11-02</td>
-        <td>
-            <button type="button" onclick="window.location.href='/view-order'">Peržiūrėti</button>
-            <button type="button" onclick="window.location.href='/edit-order'">Redaguoti</button>
-            <button type="button" onclick="window.location.href='/delete-order'">Atšaukti</button>
+            <a th:href="@{/view-order(id=${order.id})}" class="action-button">Peržiūrėti</a>
+            <a th:href="@{/edit-order(id=${order.id})}" class="action-button">Redaguoti</a>
+            <a th:if="${isAdmin}" th:href="@{/delete-order(id=${order.id})}" class="action-button">Ištrinti</a>
         </td>
     </tr>
     </tbody>
 </table>
 
 <div class="center-actions">
-    <button onclick="window.location.href='/generate-report'">Generuoti Ataskaitą</button>
+    <button th:if="${isAdmin}" onclick="window.location.href='/generate-report'">Generuoti Ataskaitą</button>
     <button onclick="window.location.href='/create-order'">Sukurti Naują Užsakymą</button>
 </div>
 

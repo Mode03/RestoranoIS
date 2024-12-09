@@ -36,7 +36,7 @@ form {
     background-color: #fff;
     padding: 20px;
     margin: 20px auto;
-    width: 300px;
+    width: 90%;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
@@ -190,4 +190,21 @@ th {
   color: black;
   border-radius:10px;
   background-color: transparent
+}
+
+/* Stilius patiekalų blokų išdėstymui */
+.dishes-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 stulpeliai */
+    gap: 20px; /* Tarpai tarp blokų */
+    margin: 20px auto;
+    width: 90%;
+}
+
+.dish-block {
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
 }

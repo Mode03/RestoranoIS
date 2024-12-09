@@ -1,40 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Ataskaitos Generavimas</title>
+    <title>Ataskaitos Filtrai</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-<div th:replace="~{fragments/navbar}"></div>
-<h2>Ataskaitos Generavimas</h2>
+<h2>Generuoti Ataskaitą</h2>
+<form th:action="@{/report}" method="GET">
+    <label for="startDate">Pradžios data:</label>
+    <input type="date" id="startDate" name="startDate"><br>
 
-<div class="report-filters">
-    <form action="/report" method="get">
-        <label for="startDate">Pradžios Data:</label>
-        <input type="date" id="startDate" name="startDate">
+    <label for="endDate">Pabaigos data:</label>
+    <input type="date" id="endDate" name="endDate"><br>
 
-        <label for="endDate">Pabaigos Data:</label>
-        <input type="date" id="endDate" name="endDate">
+    <label for="paymentType">Mokėjimo tipas:</label>
+    <select id="paymentType" name="paymentType">
+        <option value="">-- Visi --</option>
+        <option th:each="type : ${paymentTypes}" th:value="${type.id}" th:text="${type.name}"></option>
+    </select><br>
 
-        <label for="paymentMethod">Mokėjimo Metodas:</label>
-        <select id="paymentMethod" name="paymentMethod">
-            <option value="all">Visi</option>
-            <option value="card">Kortelė</option>
-            <option value="cash">Grynais</option>
-            <option value="bank_transfer">Banko pavedimas</option>
-        </select>
+    <label for="statusType">Statusas:</label>
+    <select id="statusType" name="statusType">
+        <option value="">-- Visi --</option>
+        <option th:each="status : ${statusTypes}" th:value="${status.id}" th:text="${status.name}"></option>
+    </select><br>
 
-        <label for="orderStatus">Užsakymo Būsena:</label>
-        <select id="orderStatus" name="orderStatus">
-            <option value="all">Visos</option>
-            <option value="completed">Įvykdyta</option>
-            <option value="pending">Laukiama</option>
-            <option value="cancelled">Atšaukta</option>
-        </select>
-
-        <button type="submit">Sugeneruoti Ataskaitą</button>
-    </form>
-</div>
+    <button type="submit">Generuoti Ataskaitą</button>
+</form>
 </body>
 </html>
