@@ -1,31 +1,65 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Redaguoti Darbo Grafiką - Savaitė</title>
-  <link rel="stylesheet" th:href="@{/css/style.css}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redaguoti Darbo Grafiką - Savaitė</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
 <div th:insert="~{fragments/navbar}"></div>
 <div class="container">
-  <h2>Redaguoti Darbo Grafiką - Savaitė <span th:text="${weekNumber}"></span></h2>
-  <!-- <form th:action="@{/work-schedule/week/{weekNumber}/save}" th:method="post" th:object="${schedule}"> -->
-  <form>
-    <div class="container">
-      <div class="edit-order" th:each="entry, iter : ${schedule}">
-        <label>Darbuotojas:</label>
-        <input type="text" name="workerEntries" th:value="${entry}" class="input-field" />
-      </div>
-    </div>
+    <h2>Redaguoti Darbo Grafiką - Savaitė <span th:text="${id}"></span></h2>
 
-    <button type="submit" class="submit-button">Išsaugoti</button>
-  </form>
+    <form th:action="@{|/work-schedule/week/${id}/save|}" th:method="post" th:object="${schedule}">
+        <table class="schedule-edit-table">
+            <thead>
+            <tr>
+                <th>Darbuotojas</th>
+                <th>Diena</th>
+                <th>Pradžios Laikas</th>
+                <th>Pabaigos Laikas</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="detail : ${scheduleDetails}">
 
-  <form action="/work-schedule" method="get" class="back-form">
-    <button class="submit-button">Grįžti į sąrašą</button>
-  </form>
+                    <input type="hidden" name="entryId" th:value="${detail.getScheduleEntryId()}" />
+
+
+                    <input type="hidden" name="employeeId" th:value="${detail.employeeId}" />
+                <td>
+                    <select name="newId" class="input-field">
+                        <option value="" disabled selected>Pasirinkti Darbuotoją</option>
+                        <option th:each="user : ${users}"
+                                th:value="${user.id}"
+                                th:text="${user.vardas + ' ' + user.pavarde}"
+                                th:selected="${detail.employeeName == (user.vardas + ' ' + user.pavarde)}">
+                        </option>
+                    </select>
+                </td>
+                <td th:text="${detail.workDay}"></td>
+                <td>
+                    <input type="hidden" name="startTimeDate"
+                           th:value="${detail.startTime != null ? #temporals.format(detail.startTime, 'yyyy-MM-dd') : ''}" />
+                    <input type="time" name="startTimeTime"
+                           th:value="${detail.startTime != null ? #temporals.format(detail.startTime, 'HH:mm') : ''}" />
+                </td>
+                <td>
+                    <input type="hidden" name="endTimeDate"
+                           th:value="${detail.endTime != null ? #temporals.format(detail.endTime, 'yyyy-MM-dd') : ''}" />
+                    <input type="time" name="endTimeTime"
+                           th:value="${detail.endTime != null ? #temporals.format(detail.endTime, 'HH:mm') : ''}" />
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <button type="submit" class="submit-button">Išsaugoti</button>
+    </form>
+
+    <form action="/work-schedule" method="get" class="back-form">
+        <button class="submit-button">Grįžti į sąrašą</button>
+    </form>
 </div>
-
 </body>
 </html>
