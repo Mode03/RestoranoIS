@@ -29,7 +29,12 @@
         <button th:onclick="'confirmRemove(' + ${workSchedule.id} + ')'" class="view-button">Šalinti</button>
     </div>
 
-    <button type="button" class="view-button">Generuoti Savaitės grafiką</button>
+
+    <form action="/work-schedule/week/generate" method="post">
+        <button type="submit" class="view-button">Generuoti Savaitės grafiką</button>
+    </form>
+
+
 
     <form action="/" method="get" class="back-form">
         <button class="submit-button">Grįžti atgal</button>

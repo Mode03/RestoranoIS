@@ -22,6 +22,9 @@ import java.util.List;
 @Controller
 public class WorkScheduleController {
 
+    @Autowired
+    private WorkScheduleService scheduleService;
+
     private final UserRepository userRepository;
     private final UserService userService;
     private final WorkScheduleRepository workScheduleRepository;
@@ -133,6 +136,11 @@ public class WorkScheduleController {
     public String confirmRemoveSchedule(@PathVariable int weekNumber, Model model) {
         model.addAttribute("weekNumber", weekNumber);
         return "WorkSchedule/confirm-remove";
+    }
+    @PostMapping("/work-schedule/week/generate")
+    public String generateSchedule() {
+        scheduleService.generateNextWeekSchedule();
+        return "redirect:/work-schedule";
     }
 }
 
