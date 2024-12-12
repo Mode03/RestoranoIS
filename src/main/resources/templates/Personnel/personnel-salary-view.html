@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Darbuotojų sarašas</title>
+    <title>Darbuotojų algų sarašas</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
 <div th:insert="~{fragments/navbar}"></div>
 
-<h1>Darbuotojų sarašas</h1>
+<h1>Darbuotojų ir algų sarašas</h1>
 <table>
     <thead>
     <tr>
@@ -17,8 +17,7 @@
         <th>Vardas</th>
         <th>Pavarde</th>
         <th>Asmens Kodas</th>
-        <th>Pareigos</th>
-        <th>Telefonas</th>
+        <th>Alga</th>
         <th></th>
     </tr>
     </thead>
@@ -28,20 +27,10 @@
         <td th:text="${employee.user.vardas}"></td>
         <td th:text="${employee.user.pavarde}"></td>
         <td th:text="${employee.asmensKodas}"></td>
-        <td th:text="${employee.pareigos}"></td>
-        <td th:text="${employee.telefonas}"></td>
-        <td>
-            <button th:onclick="|window.location='@{/personnel-list/view/{id}(id=${employee.idNaudotojas})}'|">Peržiūrėti</button>
-        </td>
+        <td th:text="${employee.alga}"></td>
     </tr>
     </tbody>
 </table>
-<div>
-    <button th:onclick="|window.location='@{/personnel-list/create}'|">Sukurti naują personalą</button>
-    <button th:onclick="|window.location='@{/personnel-list/salary}'|">Skaičiuoti algas</button>
-</div>
-<div th:if="${info}" style="color: blue;">
-    <p th:text="${info}"></p>
-</div>
+<button th:onclick="|window.location='@{/personnel-list}'|">Gryžti į darbuotojų sarašą</button>
 </body>
 </html>
