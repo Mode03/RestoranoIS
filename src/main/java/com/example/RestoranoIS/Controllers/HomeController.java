@@ -42,7 +42,9 @@ public class HomeController {
         }
 
         boolean isEmployee = userService.isEmployee(loggedInUser.getId());
+        boolean isAdmin = userService.isAdministrator(loggedInUser.getId());
         model.addAttribute("isEmployee", isEmployee);
+        model.addAttribute("isAdmin", isAdmin);
 
         return "main"; // Render the main page if user is logged in
     }
@@ -56,8 +58,9 @@ public class HomeController {
         }
 
         boolean isEmployee = userService.isEmployee(loggedInUser.getId());
+        boolean isAdmin = userService.isAdministrator(loggedInUser.getId());
         model.addAttribute("isEmployee", isEmployee);
-
+        model.addAttribute("isAdmin", isAdmin);
         return "main"; // Render the main page if user is logged in
     }
 

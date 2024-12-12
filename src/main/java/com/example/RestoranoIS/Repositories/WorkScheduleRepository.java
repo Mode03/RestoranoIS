@@ -71,5 +71,9 @@ public interface WorkScheduleRepository extends JpaRepository<WorkSchedule, Inte
     @Query(value = "DELETE FROM DARBO_GRAFIKAI WHERE id = :weekId", nativeQuery = true)
     void deleteWorkSchedule(@Param("weekId") int weekId);
 
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE FROM DARBUOTOJU_DARBO_GRAFIKU_IRASAI WHERE fk_Darbo_grafiko_irasas = :weekId", nativeQuery = true)
+    void deleteEmployeeWorkScheduleEntries(@Param("weekId") int weekId);
 
 }

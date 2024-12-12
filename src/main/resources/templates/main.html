@@ -12,7 +12,7 @@
     <a href="/orders" th:if="${!isEmployee}">Užsakymai</a> |
     <a href="/day-request">Laisvų dienų prašymas</a> |
     <a href="/work-schedule">Darbo grafikai</a> |
-    <a href="/personnel-list">Personalas</a> |
+    <a href="/personnel-list" th:if="${isAdmin}"}>Personalas</a> |
     <a href="/products">Produktai</a> |
     <a href="/reservations">Rezervacijos</a> |
 </body>

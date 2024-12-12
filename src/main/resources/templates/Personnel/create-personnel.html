@@ -19,12 +19,11 @@
         <label>Pavardė: </label><input type="text" name="pavarde" th:field="*{user.pavarde}" required/>
         <label>Asmens kodas: </label><input type="text" name="asmenskodas" th:field="*{asmensKodas}" required/>
         <label>Pareigos: </label><input type="text" name="pareigos" th:field="*{pareigos}" required/>
+        <label>Ar registruojamas administratorius: </label><input type="checkbox" name="selected">
         <label>Gimimo data: </label><input type="date" name="gimimodata" th:field="*{user.gimimoData}" required/>
         <label>El. Paštas: </label><input type="text" name="elPastas" th:field="*{user.elPastas}" required/>
-        <label>Alga: </label><input type="number" step="0.01" name="alga" th:field="*{alga}" required/>
         <label>Telefonas: </label><input type="text" name="telefonas" th:field="*{telefonas}" required/>
         <label>Adresas: </label><input type="text" name="adresas" th:field="*{adresas}" required/>
-        <label>Atostogų dienos: </label><input type="number" name="atostogos" th:field="*{atostoguDienos}" required/>
         <label>Lytis: </label><input type="text" name="lytis" th:field="*{user.lytis}" required/>
         <label for="miestas">Miestas:</label>
         <select id="miestas" th:field="*{miestas}">
@@ -38,7 +37,7 @@
         <label>Slaptazodis: </label><input type="text" name="slaptazodis" th:field="*{user.slaptazodis}" required/>
 
     </div>
-    <button style="border: 2px solid #04AA6D; width:76px;" class="view-button" type="submit">Sukurti</button>
+    <button type="submit">Sukurti</button>
 </form>
 <a th:href="@{/personnel-list}">Atgal į sarašą</a>
 

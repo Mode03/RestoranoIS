@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.swing.text.html.Option;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class WorkScheduleController {
@@ -127,7 +129,15 @@ public class WorkScheduleController {
 
     @GetMapping("/work-schedule/week/{weekNumber}/remove")
     public String removeSchedule(@PathVariable int weekNumber) {
+        Optional<WorkSchedule> entry = workScheduleRepository.findById(weekNumber);
+        if(entry.isEmpty()) throw new IllegalArgumentException("schedule not found: " + weekNumber);
+        WorkSchedule schedule = entry.get();
+        List<WorkScheduleEntry> workScheduleEntries = workScheduleEntryRepository.findByFkDarboGrafikas_Id(weekNumber);
+
         workScheduleRepository.deleteWorkScheduleEntries(weekNumber);
+        for(WorkScheduleEntry entr: workScheduleEntries) {
+            workScheduleRepository.deleteEmployeeWorkScheduleEntries(entr.getId());
+        }
         workScheduleRepository.deleteWorkSchedule(weekNumber);
         return "redirect:/work-schedule";
     }
