@@ -8,9 +8,8 @@
 </head>
 <body>
 <div th:replace="~{fragments/navbar}"></div>
-
-<h2>Užsakymo Redagavimas</h2>
 <form action="/edit-order" method="post">
+    <h1>Užsakymo Redagavimas</h1>
     <input type="hidden" name="id" th:value="${order.id}">
 
     <label for="username">Klientas:</label>

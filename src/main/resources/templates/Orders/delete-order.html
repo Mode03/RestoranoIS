@@ -9,10 +9,8 @@
 <body>
 <div th:replace="~{fragments/navbar}"></div>
 
-<h2>Patvirtinti Užsakymo Pašalinimą</h2>
-
 <form action="/delete-order" method="post">
-    <h2>Ar tikrai norite pašalinti užsakymą:</h2>
+    <h1>Ar tikrai norite pašalinti užsakymą:</h1>
     <p><strong>Id:</strong> <span th:text="${order.id}"></span></p>
     <p><strong>Klientas:</strong> <span th:text="${order.client.slapyvardis}">Vardenis</span></p>
     <p><strong>Užsakymo data:</strong> <span th:text="${order.data}"></span></p>

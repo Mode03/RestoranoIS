@@ -56,20 +56,19 @@ form select {
     border-radius: 4px;
 }
 
-form button {
+form button, form a {
     padding: 12px 20px;
     background-color: #333;
+    text-decoration: none;
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     text-align: center;
     transition: background-color 0.3s ease;
+    margin: 5px; /* Pridėkite atstumą tarp elementų */
 }
 
-form button:hover {
-    background-color: #555;
-}
 /* Lentelės stilius */
 table {
     width: 90%;
@@ -97,11 +96,18 @@ th {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 10px;
+    gap: 5px;
     background-color: #f9f9f9;
     border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.container h1,
+.container h2,
+.container h3 {
+    margin-top: 0;
+    margin-bottom: 5px;
 }
 
 .edit-order {
@@ -133,28 +139,13 @@ th {
     background-color: #c9302c;
 }
 
-.cancel-link {
-    display: inline-block;
-    text-align: center;
-    text-decoration: none;
-    color: #333;
-    padding: 10px 20px;
-    background-color: #ddd;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
-}
-
-.cancel-link:hover {
-    background-color: #bbb;
-}
-
 .view-button, .delete-button, .modify-button{
     color: black;
     border-radius:10px;
     background-color: transparent
 }
 
-.container .link-container, .center-actions {
+.container .link-container, .center-actions{
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -162,16 +153,18 @@ th {
     margin-top: 20px;
 }
 
-.container a, button, table a {
-    color: #333;
-    background-color: #E4E0E1;
+a, button, table a, form button, form a {
+    padding: 12px 20px;
+    background-color: #333;
     text-decoration: none;
-    padding: 10px 15px;
+    color: white;
+    border: none;
     border-radius: 4px;
-    transition: background-color 0.3s, color 0.3s;
-    border: 1px solid #333;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
 }
 
-.container a:hover, button:hover, table a:hover {
+a:hover, button:hover, form button:hover, form a:hover {
     background-color: #bbb;
 }
