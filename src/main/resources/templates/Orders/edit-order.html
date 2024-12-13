@@ -28,6 +28,11 @@
         <option th:each="orderType : ${orderTypes}" th:value="${orderType.id}" th:text="${orderType.name}" th:selected="${orderType.id == order.orderType.id}"></option>
     </select>
 
+    <label for="statusTypeId">Užsakymo būsena:</label>
+    <select id="statusTypeId" name="statusTypeId" required>
+        <option th:each="statusType : ${statusTypes}" th:value="${statusType.id}" th:text="${statusType.name}" th:selected="${statusType.id == order.statusType.id}"></option>
+    </select>
+
     <h3>Redaguoti Patiekalus</h3>
     <table id="dishes-table">
         <thead>

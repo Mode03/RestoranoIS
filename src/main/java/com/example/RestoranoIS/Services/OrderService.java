@@ -67,16 +67,19 @@ public class OrderService {
 
     @Transactional
     public void updateOrder(Integer orderId, Integer paymentTypeId, Integer orderTypeId,
-                            List<Integer> dishIds, List<Integer> quantities) {
+                            Integer statusTypeId, List<Integer> dishIds, List<Integer> quantities) {
         Order order = getOrderById(orderId);
 
         PaymentType paymentType = paymentTypeRepository.findById(paymentTypeId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid payment type ID"));
         OrderType orderType = orderTypeRepository.findById(orderTypeId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid order type ID"));
+        StatusType statusType = statusTypeRepository.findById(statusTypeId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid status type ID"));
 
         order.setPaymentType(paymentType);
         order.setOrderType(orderType);
+        order.setStatusType(statusType);
 
         // Pašalinkite esamus patiekalus iš užsakymo ir pridėkite naujus
         orderDishRepository.deleteByOrderId(orderId);
@@ -92,7 +95,6 @@ public class OrderService {
             }
         }
 
-        // Atnaujinkite užsakymą su bendra suma
         order.setBendraSuma(totalSum);
         orderRepository.save(order);
     }
