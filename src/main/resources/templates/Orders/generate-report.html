@@ -6,8 +6,9 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-<h2>Generuoti Ataskaitą</h2>
+<div th:insert="~{fragments/navbar}"></div>
 <form th:action="@{/report}" method="GET">
+    <h1>Generuoti Ataskaitą</h1>
     <label for="startDate">Pradžios data:</label>
     <input type="date" id="startDate" name="startDate"><br>
 

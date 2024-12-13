@@ -6,44 +6,46 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-<h2>Ataskaita</h2>
+<div th:insert="~{fragments/navbar}"></div>
+<div class="container">
+    <h1>Ataskaita</h1>
 
-<h3>Filtruoti Užsakymai</h3>
-<table>
-    <thead>
-    <tr>
-        <th>Užsakymo ID</th>
-        <th>Data</th>
-        <th>Bendra Suma</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="order : ${filteredOrders}">
-        <td th:text="${order.id}"></td>
-        <td th:text="${order.data}"></td>
-        <td th:text="${order.bendraSuma}"></td>
-    </tr>
-    </tbody>
-</table>
+    <h3>Filtruoti Užsakymai</h3>
+    <table>
+        <thead>
+        <tr>
+            <th>Užsakymo ID</th>
+            <th>Data</th>
+            <th>Bendra Suma</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="order : ${filteredOrders}">
+            <td th:text="${order.id}"></td>
+            <td th:text="${order.data}"></td>
+            <td th:text="${order.bendraSuma}"></td>
+        </tr>
+        </tbody>
+    </table>
 
-<h3>Patiekalų Statistikos</h3>
-<table>
-    <thead>
-    <tr>
-        <th>Patiekalo Pavadinimas</th>
-        <th>Kiekis</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="entry : ${dishSummary}">
-        <td th:text="${entry.key}"></td>
-        <td th:text="${entry.value}"></td>
-    </tr>
-    </tbody>
-</table>
+    <h3>Patiekalų Statistikos</h3>
+    <table>
+        <thead>
+        <tr>
+            <th>Patiekalo Pavadinimas</th>
+            <th>Kiekis</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="entry : ${dishSummary}">
+            <td th:text="${entry.key}"></td>
+            <td th:text="${entry.value}"></td>
+        </tr>
+        </tbody>
+    </table>
 
-<h3>Visų Užsakymų Bendra Suma</h3>
-<p th:text="'Bendra suma: ' + ${totalOrderSum} + ' €'"></p>
-
+    <h3>Visų Užsakymų Bendra Suma</h3>
+    <p th:text="'Bendra suma: ' + ${totalOrderSum} + ' €'"></p>
+</div>
 </body>
 </html>
