@@ -48,8 +48,15 @@ public class WorkScheduleController {
     }
 
     @GetMapping("/work-schedule")
-    public String showWorkSchedulePage(Model model) {
+    public String showWorkSchedulePage(Model model, HttpSession session) {
         List<WorkSchedule> workSchedules = workScheduleRepository.findAll();
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            return "redirect:/login";
+        }
+        Integer userId = loggedInUser.getId();
+        boolean isAdmin = userService.isAdministrator(userId);
+        model.addAttribute("isAdmin", isAdmin);
         model.addAttribute("workSchedules", workSchedules);
         return "WorkSchedule/work-schedule";
     }

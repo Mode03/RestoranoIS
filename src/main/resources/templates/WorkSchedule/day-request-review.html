@@ -14,6 +14,7 @@
     <table class="form-table">
         <thead>
         <tr>
+            <th>Vardas Pavarde</th>
             <th>Pradžios Data</th>
             <th>Pabaigos Data</th>
             <th>Priežastis</th>
@@ -22,6 +23,7 @@
         </thead>
         <tbody>
         <tr th:each="form : ${forms}">
+            <td th:text="${form.fkDarbuotojas.getUser().vardas + form.fkDarbuotojas.getUser().pavarde}">Zmogus</td>
             <td th:text="${form.pradziosData}">Pradžios Data</td>
             <td th:text="${form.pabaigosData}">Pabaigos Data</td>
             <td th:text="${form.priezastis}">Priežastis</td>

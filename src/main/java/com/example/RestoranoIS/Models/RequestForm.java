@@ -24,15 +24,16 @@ public class RequestForm {
     @Column(name = "statusas", nullable = false)
     private Statusas statusas;
 
-    @Column(name = "fk_Darbuotojas", nullable = false)
-    private Integer fkDarbuotojas;
+    @JoinColumn(name = "fk_Darbuotojas", nullable = false)
+    @OneToOne(cascade = CascadeType.ALL)
+    private Employee fkDarbuotojas;
 
     @Column(name = "fk_Administratorius", nullable = false)
     private Integer fkAdministratorius;
 
     public RequestForm() {}
     public RequestForm(LocalDate pradziosData, LocalDate pabaigosData, String priezastis,
-                       Statusas statusas, Integer fkDarbuotojas, Integer fkAdministratorius) {
+                       Statusas statusas, Employee fkDarbuotojas, Integer fkAdministratorius) {
         this.pradziosData = pradziosData;
         this.pabaigosData = pabaigosData;
         this.priezastis = priezastis;
@@ -82,11 +83,11 @@ public class RequestForm {
         this.statusas = statusas;
     }
 
-    public Integer getFkDarbuotojas() {
+    public Employee getFkDarbuotojas() {
         return fkDarbuotojas;
     }
 
-    public void setFkDarbuotojas(Integer fkDarbuotojas) {
+    public void setFkDarbuotojas(Employee fkDarbuotojas) {
         this.fkDarbuotojas = fkDarbuotojas;
     }
 

@@ -51,6 +51,8 @@ public class Employee {
     public Employee() {
     }
 
+
+
     public Employee(Integer idNaudotojas, String asmensKodas, String pareigos, String telefonas, String adresas, City miestas) {
         this.idNaudotojas = idNaudotojas;
         this.asmensKodas = asmensKodas;

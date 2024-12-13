@@ -17,4 +17,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     @Transactional
     @Query(value = "DELETE FROM DARBUOTOJAI WHERE id_Naudotojas= :id",nativeQuery = true)
     void deleteEmployeeById(@Param("id") int id);
+
+    Employee findByIdNaudotojas(Integer idNaudotojas);
 }

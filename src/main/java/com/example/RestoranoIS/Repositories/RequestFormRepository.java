@@ -1,5 +1,6 @@
 package com.example.RestoranoIS.Repositories;
 
+import com.example.RestoranoIS.Models.Employee;
 import com.example.RestoranoIS.Models.RequestForm;
 import com.example.RestoranoIS.Models.Statusas;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,7 +15,7 @@ import java.util.List;
 @Repository
 public interface RequestFormRepository extends JpaRepository<RequestForm, Integer> {
 
- List<RequestForm> findAllByFkDarbuotojas(int id);
+ List<RequestForm> findAllByFkDarbuotojas(Employee employee);
 
 
   List<RequestForm> findAllByStatusasEquals(Statusas status);
