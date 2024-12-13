@@ -94,6 +94,10 @@ public class HomeController {
                                       String lytis, String userType, String specialKey, String asmensKodas, String pareigos,
                                       String telefonas, String adresas, String slapyvardis, String miestas, Model model) {
         try {
+            if (userService.isEmailTaken(elPastas)) {
+                throw new IllegalArgumentException("Toks el. paštas jau yra registruotas!");
+            }
+
             // 1. Patikrinimai (pvz., slapto rakto validacija)
             if (userType == null || userType.isEmpty()) {
                 throw new IllegalArgumentException("Vartotojo tipas nėra pasirinktas!");
@@ -160,11 +164,6 @@ public class HomeController {
     }
 
     @GetMapping("/edit-profile")
-    public String showEditProfilePage() {
-        return "edit-profile";
-    }
-
-    @GetMapping("/edit-profile/details")
     public String showEditProfilePage(HttpSession session, Model model) {
         User loggedInUser = (User) session.getAttribute("loggedInUser");
         if (loggedInUser == null) {
@@ -173,6 +172,38 @@ public class HomeController {
         model.addAttribute("user", loggedInUser);
         return "edit-profile";
     }
-  
 
+    @PostMapping("/edit-profile")
+    public String processEditProfile(String vardas, String pavarde, String email, String gimimoData, HttpSession session, Model model) {
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            return "redirect:/login";
+        }
+
+        if (!email.equals(loggedInUser.getElPastas()) && userService.isEmailTaken(email)) {
+            model.addAttribute("error", "Šis el. pašto adresas jau yra naudojamas!");
+            model.addAttribute("user", loggedInUser);
+            return "edit-profile";
+        }
+
+        try {
+            // Atnaujiname vartotojo duomenis
+            loggedInUser.setVardas(vardas);
+            loggedInUser.setPavarde(pavarde);
+            loggedInUser.setElPastas(email);
+
+            // Konvertuojame gimimo datą iš string į LocalDate
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            loggedInUser.setGimimoData(LocalDate.parse(gimimoData, formatter));
+
+            userService.updateUser(loggedInUser);
+            session.setAttribute("loggedInUser", loggedInUser); // Atnaujiname sesijos duomenis
+
+            model.addAttribute("message", "Profilis atnaujintas sėkmingai!");
+        } catch (Exception e) {
+            model.addAttribute("error", "Klaida atnaujinant profilį: " + e.getMessage());
+        }
+
+        return "redirect:/profile";
+    }
 }
