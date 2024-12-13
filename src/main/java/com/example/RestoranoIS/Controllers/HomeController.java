@@ -174,6 +174,5 @@ public class HomeController {
         return "edit-profile";
     }
   
-    @GetMapping("/day-request")
-    public String showDayRequestPage() {return "WorkSchedule/day-request";}
+
 }
