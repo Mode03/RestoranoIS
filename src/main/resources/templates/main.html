@@ -10,7 +10,7 @@
     <h2>Pagrindinis langas</h2>
     <p>Sveiki atvykę į RestoranoIS sistemą!</p>
     <a href="/orders" th:if="${!isEmployee}">Užsakymai</a> |
-    <a href="/day-request">Laisvų dienų prašymas</a> |
+    <a href="/day-request" th:if="${isEmployee}">Laisvų dienų prašymas</a> |
     <a href="/day-request-review" th:if="${isAdmin}">Laisvų dienų prašymai</a>
     <a href="/work-schedule">Darbo grafikai</a> |
     <a href="/personnel-list" th:if="${isAdmin}"}>Personalas</a> |
