@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Produktų Užsakymas</title>
@@ -10,64 +10,18 @@
 <div th:replace="~{fragments/navbar}"></div>
 
 <h2>Produktų Užsakymas</h2>
+<div th:if="${error}" style="color: red;">
+    <p th:text="${error}"></p>
+</div>
+<form th:action="@{/products/order/save/{id}(id=${product.id})}" th:method="post" th:object="${product}">
+    <input type="hidden" name="id" th:value="*{id}" />
 
-<table>
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Pavadinimas</th>
-        <th>Dabartinis kiekis</th>
-        <th>Kiek pirkti</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td>1</td>
-        <td>Pomidoras</td>
-        <td>10</td>
-        <td><input type="number"></td>
+    <label>Pavadinimas: </label><input type="text" name="pavadinimas" th:field="*{pavadinimas}" required disabled/>
+    <label>Turimas kiekis: </label><input type="number" name="kiekis" th:field="*{kiekis}" required disabled/>
+    <label>Kiek užsakyti: </label><input type="number" name="uzsakyti" required />
 
-    </tr>
-    <tr>
-        <td>2</td>
-        <td>Agurkas</td>
-        <td>10</td>
-        <td><input type="number"></td>
-
-    </tr>
-    <tr>
-        <td>3</td>
-        <td>Pupelės</td>
-        <td>5</td>
-        <td><input type="number"></td>
-
-    </tr>
-    <tr>
-        <td>4</td>
-        <td>Baklažanas</td>
-        <td>20</td>
-        <td><input type="number"></td>
-    </tr>
-    <tr>
-        <td>5</td>
-        <td>Krienas</td>
-        <td>20</td>
-        <td><input type="number"></td>
-    </tr>
-    <tr>
-        <td>6</td>
-        <td>Svogūnas</td>
-        <td>20</td>
-        <td><input type="number"></td>
-    </tr>
-    <tr>
-        <td colspan="4">
-            <button onclick="window.location.href='/products'">Užsakyti</button>
-        </td>
-    </tr>
-    </tbody>
-
-</table>
+    <button type="submit">Išsaugoti</button>
+</form>
 
 <div class="center-actions">
     <button onclick="window.location.href='/products'">Gryžti į sarašą</button>

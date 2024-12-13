@@ -1,20 +1,77 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Produktų Sąrašas</title>
     <link rel="stylesheet" href="/css/style.css">
+    <style>
+        /* Popup styles */
+        #popup {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+            justify-content: center;
+            align-items: center;
+        }
+        #popupContent {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            width: 80%;
+            max-width: 500px;
+            overflow-y: auto;
+        }
+        button {
+            margin-top: 10px;
+        }
+    </style>
+    <div id="popup" th:if="${showLow}">
+        <div id="popupContent">
+            <h3>Low Stock Products</h3>
+            <table>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Pavadinimas</th>
+                    <th>Kiekis</th>
+                    <th>Kategorija</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Loop through lowProducts list -->
+                <tr th:each="product : ${lowProducts}">
+                    <td th:text="${product.id}"></td>
+                    <td th:text="${product.pavadinimas}"></td>
+                    <td th:text="${product.kiekis}"></td>
+                    <td th:text="${product.type.name}"></td>
+                </tr>
+                </tbody>
+            </table>
+            <button onclick="closePopup()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // Show the popup when the page loads
+        window.onload = function() {
+            if (document.getElementById('popup').style.display !== 'none') {
+                document.getElementById('popup').style.display = 'flex';
+            }
+        };
+
+        // Close the popup
+        function closePopup() {
+            document.getElementById('popup').style.display = 'none';
+        }
+    </script>
 </head>
 <body>
 <!-- Navigation bar -->
 <div th:replace="~{fragments/navbar}"></div>
-<div>
-    <button type="button" onclick="window.location.href='/products/create'">Pildyti produktus</button>
-    <button type="button" onclick="window.location.href='/products/order'">Užsakyti produktus</button>
-    <button type="button" onclick="window.location.href='/products/delete'">Šalinti produktus</button>
-    <button type="button" onclick="window.location.href='/products/categories'">Produktai pagal kategoriją</button>
-</div>
-
 <h2>Produktų Sąrašas</h2>
 
 <table>
@@ -23,41 +80,28 @@
         <th>ID</th>
         <th>Pavadinimas</th>
         <th>Kiekis</th>
+        <th>Kategorija</th>
+        <th></th>
     </tr>
     </thead>
     <tbody>
-    <tr>
-        <td>1</td>
-        <td>Pomidoras</td>
-        <td>10</td>
-    </tr>
-    <tr>
-        <td>2</td>
-        <td>Agurkas</td>
-        <td>10</td>
-    </tr>
-    <tr>
-        <td>3</td>
-        <td>Pupelės</td>
-        <td>5</td>
-    </tr>
-    <tr>
-        <td>4</td>
-        <td>Baklažanas</td>
-        <td>20</td>
-    </tr>
-    <tr>
-        <td>5</td>
-        <td>Krienas</td>
-        <td>20</td>
-    </tr>
-    <tr>
-        <td>6</td>
-        <td>Svogūnas</td>
-        <td>20</td>
+    <tr th:each="product : ${products}">
+        <td th:text="${product.id}"></td>
+        <td th:text="${product.pavadinimas}"></td>
+        <td th:text="${product.kiekis}"></td>
+        <td th:text="${product.type.name}"></td>
+        <td>
+            <button th:onclick="|window.location='@{/products/order/{id}(id=${product.id})}'|">Užsakymo langas</button>
+            <button th:onclick="|window.location='@{/products/delete-confirm/{id}(id=${product.id})}'|">Šalinimo langas</button>
+        </td>
     </tr>
     </tbody>
 </table>
+<div class="center-actions">
+    <button onclick="window.location.href='/products/create'">Pildyti produktus</button>
+    <button onclick="window.location.href='/products/categories'">Produktai pagal kategoriją</button>
+    <button onclick="window.location.href='/products/storage'">Sandeliai</button>
+</div>
 
 </body>
 </html>
