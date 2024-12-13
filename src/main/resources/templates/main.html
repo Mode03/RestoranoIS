@@ -6,14 +6,18 @@
     <title>Pagrindinis</title>
 </head>
 <body>
-    <div th:insert="~{fragments/navbar}"></div>
-    <h2>Pagrindinis langas</h2>
+<div th:insert="~{fragments/navbar}"></div>
+<div class="container">
+    <h1>Pagrindinis langas</h1>
     <p>Sveiki atvykę į RestoranoIS sistemą!</p>
-    <a href="/orders" th:if="${!isEmployee}">Užsakymai</a> |
-    <a href="/day-request">Laisvų dienų prašymas</a> |
-    <a href="/work-schedule">Darbo grafikai</a> |
-    <a href="/personnel-list" th:if="${isAdmin}"}>Personalas</a> |
-    <a href="/products" th:if="${isAdmin || isEmployee}">Produktai</a> |
-    <a href="/reservations">Rezervacijos</a> |
+    <div class="link-container">
+        <a href="/orders" th:if="${!isEmployee}">Užsakymai</a>
+        <a href="/day-request">Laisvų dienų prašymas</a>
+        <a href="/work-schedule">Darbo grafikai</a>
+        <a href="/personnel-list" th:if="${isAdmin}"}>Personalas</a>
+        <a href="/products" th:if="${isAdmin || isEmployee}">Produktai</a> |
+        <a href="/reservations">Rezervacijos</a>
+    </div>
+</div>
 </body>
 </html>

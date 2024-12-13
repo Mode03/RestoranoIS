@@ -9,8 +9,8 @@
 <body>
 <div th:replace="~{fragments/navbar}"></div>
 
-<h2>Užsakymo Peržiūra</h2>
 <div class="container">
+    <h1>Užsakymo Peržiūra</h1>
     <div class="order-details">
         <p><strong>Klientas:</strong> <span th:text="${order.client.slapyvardis}">Vardenis</span></p>
         <p><strong>Užsakymo data:</strong> <span th:text="${order.data}">2024-11-01</span></p>
@@ -19,7 +19,7 @@
         <p><strong>Užsakymo suma:</strong> <span th:text="${order.getBendraSuma()}"></span></p>
     </div>
 
-    <h3>Užsakymo Patiekalai</h3>
+    <h2>Užsakymo Patiekalai</h2>
     <table>
         <thead>
         <tr>
@@ -39,8 +39,8 @@
         </tbody>
     </table>
 
-    <div class="actions">
-        <a href="/orders" class="edit-link">Grįžti</a>
+    <div class="center-actions">
+        <a href="/orders">Grįžti</a>
     </div>
 </div>
 
