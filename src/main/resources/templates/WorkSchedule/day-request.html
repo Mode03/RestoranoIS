@@ -5,24 +5,37 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Prašymas dėl atostogų</title>
   <link rel="stylesheet" th:href="@{/css/style.css}">
+  </style>
 </head>
 <body>
 <div th:insert="~{fragments/navbar}"></div>
 <div class="container">
   <h2>Prašymas dėl atostogų</h2>
-  <form action="/" method="get" class="request-form">
+  <form action="/day-request/submit" method="post" class="request-form">
     <div class="form-group">
       <label for="dateFrom">Pasirinkite dieną (nuo):</label>
-      <input type="date" id="dateFrom" name="dateFrom" required>
+      <input type="date" id="dateFrom" name="pradziosData" required>
     </div>
     <div class="form-group">
       <label for="dateTo">Pasirinkite dieną (iki):</label>
-      <input type="date" id="dateTo" name="dateTo" required>
+      <input type="date" id="dateTo" name="pabaigosData" required>
     </div>
-    <button class="submit-button">Pateikti prašymą</button>
+    <div class="form-group">
+      <label for="reason">Prašymo priežastis:</label>
+      <textarea id="reason" name="priezastis" rows="3" required></textarea>
+    </div>
+    <button type="submit" class="submit-button">Pateikti prašymą</button>
   </form>
   <a th:href="@{/}">Atgal į sarašą</a>
-</div>
 
+  <div class="request-list">
+    <div th:each="form : ${requestForms}" class="request-item">
+      <span th:text="${form.getPradziosData()}"></span>
+      <span th:text="${form.getPabaigosData()}"></span>
+      <span th:text="${form.getPriezastis()}"></span>
+      <span th:text="${form.getStatusas()}"></span>
+    </div>
+  </div>
+</div>
 </body>
 </html>
