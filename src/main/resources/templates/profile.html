@@ -7,18 +7,21 @@
 </head>
 <body>
 <div th:insert="~{fragments/navbar}"></div>
-<h2>Profilio langas</h2>
-<div class="profile-info">
-    <p>Čia bus rodoma vartotojo informacija:</p>
-    <ul>
-        <li>Vartotojo vardas: <span th:text="${user.vardas}"></span></li>
-        <li>El. paštas: <span th:text="${user.elPastas}"></span></li>
-        <li>Gimimo data: <span th:text="${user.gimimoData}"></span></li>
-    </ul>
-</div>
-<div class="profile-actions">
-    <a href="/edit-profile" class="button">Redaguoti profilį</a>
-    <a href="/logout" class="button">Atsijungti</a>
+<div class="container">
+    <h2>Profilio langas</h2>
+    <div class="profile-info">
+        <p>Jūsų vartotojo informacija:</p>
+        <ul>
+            <li>Vardas: <span th:text="${user.vardas}"></span></li>
+            <li>Pavardė: <span th:text="${user.pavarde}"></span></li>
+            <li>El. paštas: <span th:text="${user.elPastas}"></span></li>
+            <li>Gimimo data: <span th:text="${user.gimimoData}"></span></li>
+        </ul>
+    </div>
+    <div class="profile-actions">
+        <a href="/edit-profile" class="button">Redaguoti profilį</a>
+        <a href="/logout" class="button">Atsijungti</a>
+    </div>
 </div>
 </body>
 </html>

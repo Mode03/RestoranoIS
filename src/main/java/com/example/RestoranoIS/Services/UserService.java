@@ -100,5 +100,11 @@ public class UserService {
     public boolean isEmployee(Integer userId) {
         return employeeRepository.existsByIdNaudotojas(userId) && !isAdministrator(userId);
     }
+    public void updateUser(User user) {
+        userRepository.save(user);
+    }
 
+    public boolean isEmailTaken(String email) {
+        return userRepository.findByelPastas(email).isPresent();
+    }
 }
