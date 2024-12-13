@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Sandelio Kūrimas</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<!-- Navigation bar -->
+<div th:replace="~{fragments/navbar}"></div>
+
+<h2>Sandelio Kūrimas</h2>
+
+<form th:action="@{/products/storage/create/submit}" th:object="${storage}" th:method="post">
+    <div th:if="${error}" style="color: red;">
+        <p th:text="${error}"></p>
+    </div>
+    <label>Adresas: </label><input type="text" name="adresas" th:field="*{adresas}" required/>
+    <label>Talpa: </label><input type="number" name="talpa" th:field="*{talpa}" required/>
+
+    <label for="miestas">Miestas:</label>
+    <select id="miestas" th:field="*{miestas}" required>
+        <option value="" disabled selected>Pasirink miestą</option>
+        <option th:each="city : ${cities}"
+                th:value="${city.id}"
+                th:text="${city.pavadinimas}">
+        </option>
+    </select>
+
+    <label for="type">Sandelio tipas:</label>
+    <select id="type" th:field="*{type}">
+        <option value="0" disabled selected>Pasirink sandelio tipą</option>
+        <option th:each="storageType : ${storageTypes}"
+                th:value="${storageType.id}"
+                th:text="${storageType.name}">
+        </option>
+    </select>
+
+    <label for="employee">Darbuotojas:</label>
+    <select id="employee" th:field="*{employee}">
+        <option value="0" disabled selected>Pasirink darbuotoją</option>
+        <option th:each="employee : ${employees}"
+                th:value="${employee.idNaudotojas}"
+                th:text="${employee.user.vardas + ' ' + employee.user.pavarde}">
+        </option>
+    </select>
+    <br><br>
+    <button type="submit">Sukurti</button>
+</form>
+<div class="center-actions">
+    <button onclick="window.location.href='/products'">Gryžti į sarašą</button>
+</div>
+</body>
+</html>

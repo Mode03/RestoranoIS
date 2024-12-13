@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Sandelių Sąrašas</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<!-- Navigation bar -->
+<div th:replace="~{fragments/navbar}"></div>
+
+<h2>Sandelių Sąrašas</h2>
+<table>
+    <thead>
+    <tr>
+        <th>Nr</th>
+        <th>Adresas</th>
+        <th>Talpa</th>
+        <th>Tipas</th>
+        <th>Miestas</th>
+        <th>Darbuotojas</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="storage : ${storages}">
+        <td th:text="${storage.sandelioNr}"></td>
+        <td th:text="${storage.adresas}"></td>
+        <td th:text="${storage.talpa}"></td>
+        <td th:text="${storage.type.name}"></td>
+        <td th:text="${storage.miestas.pavadinimas}"></td>
+        <td th:text="${storage.employee.user.vardas + ' ' + storage.employee.user.pavarde}"></td>
+    </tr>
+    </tbody>
+</table>
+<div class="center-actions">
+    <button onclick="window.location.href='/products/storage/create'">Pridėti sandėlį</button>
+    <button onclick="window.location.href='/products'">Gryžti į sarašą</button>
+</div>
+</body>
+</html>

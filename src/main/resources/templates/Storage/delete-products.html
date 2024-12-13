@@ -1,64 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Produktų Sąrašas</title>
+    <title>Produkto Pašalinimas</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-<!-- Navigation bar -->
-<div th:replace="~{fragments/navbar}"></div>
-
-<h2>Produktų Sąrašas</h2>
-
-<table>
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Pavadinimas</th>
-        <th></th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td>1</td>
-        <td>Pomidoras</td>
-        <td><button type="button" onclick="window.location.href='/products/delete-confirm'">Naikinti</button></td>
-
-    </tr>
-    <tr>
-        <td>2</td>
-        <td>Agurkas</td>
-        <td><button type="button" onclick="window.location.href='/products/delete-confirm'">Naikinti</button></td>
-
-    </tr>
-    <tr>
-        <td>3</td>
-        <td>Pupelės</td>
-        <td><button type="button" onclick="window.location.href='/products/delete-confirm'">Naikinti</button></td>
-
-    </tr>
-    <tr>
-        <td>4</td>
-        <td>Baklažanas</td>
-        <td><button type="button" onclick="window.location.href='/products/delete-confirm'">Naikinti</button></td>
-    </tr>
-    <tr>
-        <td>5</td>
-        <td>Krienas</td>
-        <td><button type="button" onclick="window.location.href='/products/delete-confirm'">Naikinti</button></td>
-    </tr>
-    <tr>
-        <td>6</td>
-        <td>Svogūnas</td>
-        <td><button type="button" onclick="window.location.href='/products/delete-confirm'">Naikinti</button></td>
-    </tr>
-    </tbody>
-</table>
-
+<div th:insert="~{fragments/navbar}"></div>
+<h2>Patvirtinti Produkto Pašalinimą</h2>
 <div class="center-actions">
-    <button onclick="window.location.href='/products'">Gryžti į sarašą</button>
+    <p>Ar tikrai norite pašalinti Šį personalą?</p>
+    <td>
+        <button th:onclick="|window.location='@{/products/delete/{id}(id=${product.id})}'|" style="border: 2px solid #c20615; width:76px;" class="modify-button">Taip, pašalinti</button>
+    </td>
+    <a href="/products" class="cancel-link">Atšaukti</a>
 </div>
-
 </body>
 </html>

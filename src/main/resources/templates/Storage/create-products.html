@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Produktų Papildymas</title>
@@ -10,25 +10,25 @@
 <div th:replace="~{fragments/navbar}"></div>
 
 <h2>Produktų Papildymas</h2>
-<form>
+<form th:action="@{/products/create/submit}" th:object="${product}" th:method="post">
     <div>
-        <label>Pavadinimas: </label><input type="text" name="Name"/>
-        <label>Kategorija: </label>
-        <select name="Category" id="Category">
-            <option value="Fruits">Vaisius</option>
-            <option value="Vegetables">Daržovė</option>
-            <option value="Meat">Mėsa</option>
-            <option value="Drinks">Gėrimas</option>
+        <label>Pavadinimas: </label><input type="text" name="pavadinimas" th:field="*{pavadinimas}" required/>
+
+        <label for="type">Produkto tipas:</label>
+        <select id="type" th:field="*{type}">
+            <option value="0" disabled selected>Pasirink produkto tipą</option>
+            <option th:each="productType : ${productTypes}"
+                    th:value="${productType.id}"
+                    th:text="${productType.name}">
+            </option>
         </select>
     </div>
-
-    <button onclick="window.location.href='/products'">Papildyti</button>
+    <button type="submit">Papildyti</button>
 </form>
 
 
 <div class="center-actions">
     <button onclick="window.location.href='/products'">Gryžti į sarašą</button>
 </div>
-
 </body>
 </html>
