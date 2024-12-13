@@ -176,6 +176,7 @@ public class OrderController {
         model.addAttribute("orderDishes", orderService.getOrderDishesByOrderId(orderId));
         model.addAttribute("paymentTypes", orderService.getAllPaymentTypes());
         model.addAttribute("orderTypes", orderService.getAllOrderTypes());
+        model.addAttribute("statusTypes", orderService.getAllOrderStatuses());
         return "Orders/edit-order";
     }
 
@@ -183,10 +184,12 @@ public class OrderController {
     public String processEditOrder(@RequestParam("id") Integer orderId,
                                    @RequestParam Integer paymentTypeId,
                                    @RequestParam Integer orderTypeId,
+                                   @RequestParam Integer statusTypeId,
                                    @RequestParam(required = false) List<Integer> dishIds,
                                    @RequestParam(required = false) List<Integer> quantities,
                                    @RequestParam("date") String date) {
-        orderService.updateOrder(orderId, paymentTypeId, orderTypeId, dishIds, quantities);
+        // Atnaujinti užsakymo informaciją
+        orderService.updateOrder(orderId, paymentTypeId, orderTypeId, statusTypeId, dishIds, quantities);
 
         Order order = orderService.getOrderById(orderId);
         order.setData(LocalDate.parse(date));
@@ -194,7 +197,6 @@ public class OrderController {
 
         return "redirect:/orders";
     }
-
 
     @GetMapping("/delete-order")
     public String deleteOrder(@RequestParam("id") Integer orderId, Model model) {

@@ -35,7 +35,7 @@
         <td th:text="${order.orderType.name}"></td>
         <td>
             <a th:href="@{/view-order(id=${order.id})}" class="action-button">Peržiūrėti</a>
-            <a th:href="@{/edit-order(id=${order.id})}" class="action-button">Redaguoti</a>
+            <a th:if="${isAdmin}" th:href="@{/edit-order(id=${order.id})}" class="action-button">Redaguoti</a>
             <a th:if="${isAdmin}" th:href="@{/delete-order(id=${order.id})}" class="action-button">Ištrinti</a>
         </td>
     </tr>
