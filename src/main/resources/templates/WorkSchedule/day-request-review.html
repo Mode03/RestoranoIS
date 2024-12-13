@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day Request Review</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:insert="~{fragments/navbar}"></div>
+<div class="container">
+    <h2>Laisvu Dienu prasymai</h2>
+
+    <table class="form-table">
+        <thead>
+        <tr>
+            <th>Pradžios Data</th>
+            <th>Pabaigos Data</th>
+            <th>Priežastis</th>
+            <th>Veiksmai</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="form : ${forms}">
+            <td th:text="${form.pradziosData}">Pradžios Data</td>
+            <td th:text="${form.pabaigosData}">Pabaigos Data</td>
+            <td th:text="${form.priezastis}">Priežastis</td>
+            <td>
+                <form th:action="@{/day-request/accept}" method="post" style="display:inline;">
+                    <input type="hidden" name="formId" th:value="${form.id}"/>
+                    <button type="submit" class="accept-button">Priimti</button>
+                </form>
+                <form th:action="@{/day-request/reject}" method="post" style="display:inline;">
+                    <input type="hidden" name="formId" th:value="${form.id}"/>
+                    <button type="submit" class="reject-button">Atmesti</button>
+
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a th:href="@{/}" class="back-link">Atgal į pagrindinį puslapį</a>
+</div>
+</body>
+</html>
