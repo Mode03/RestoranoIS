@@ -18,26 +18,20 @@
     <h2>Darbuotojų darbo grafikas</h2>
 
     <!-- Loop through workSchedules to dynamically generate week sections -->
-    <div th:each="workSchedule : ${workSchedules}" class="edit-order">
+    <div th:each="workSchedule : ${workSchedules}">
         <span class="week-header" th:text="'Savaitė: ' + ${workSchedule.id}">Savaitė</span>
         <button type="button" class="view-button"
                 th:data-url="@{'/work-schedule/week/' + ${workSchedule.id}}"
                 onclick="window.location.href=this.getAttribute('data-url')">Peržiūrėti</button>
         <button type="button" class="view-button"
-                th:data-url="@{'/work-schedule/week/' + ${workSchedule.id} + '/edit'}" th:if="${isAdmin}"
+                th:data-url="@{'/work-schedule/week/' + ${workSchedule.id} + '/edit'}"
                 onclick="window.location.href=this.getAttribute('data-url')">Redaguoti</button>
-        <button th:onclick="'confirmRemove(' + ${workSchedule.id} + ')'"  th:if="${isAdmin}" class="view-button">Šalinti</button>
+        <button th:onclick="'confirmRemove(' + ${workSchedule.id} + ')'" class="view-button">Šalinti</button>
     </div>
 
-
     <form action="/work-schedule/week/generate" method="post">
-        <button type="submit" class="view-button" th:if="${isAdmin}" >Generuoti Savaitės grafiką</button>
-    </form>
-
-
-
-    <form action="/" method="get" class="back-form">
-        <button class="submit-button">Grįžti atgal</button>
+        <button type="submit">Generuoti Savaitės grafiką</button>
+        <a href="/" class="cancel-link">Grįžti atgal</a>
     </form>
 </div>
 
