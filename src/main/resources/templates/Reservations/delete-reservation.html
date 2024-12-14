@@ -8,18 +8,16 @@
 </head>
 <body>
 <div th:insert="~{fragments/navbar}"></div>
-<div class="center-actions">
-  <h1>Ar tikrai ištrinti rezervaciją?</h1>
-  <td>
-    <button th:onclick="|window.location='@{/reservations/delete/{id}(id=${reservation.id})}'|" style="border: 2px solid #c20615; width:76px;" class="modify-button">Taip, pašalinti</button>
-  </td>
-  <!-- Final confirmation button
-  <form th:action="@{/reservations/delete/confirm/{id}(id=${reservation.id})}" method="post">
-    <button type="submit" style="background-color: red; color: white;">Ištrinti</button>
-  </form>
-  -->
-  <a href="/reservations" class="cancel-link">Atšaukti</a>
 
-</div>
+  <form th:action="@{/reservations/delete/{id}(id=${reservation.rezervacija})}" method="post">
+    <h1>Ar tikrai ištrinti rezervaciją?</h1>
+    <p><strong>Rezervacijos Nr.:</strong> <span th:text="${reservation.rezervacija}"></span></p>
+    <p><strong>Klientas:</strong> <span th:text="${reservation.klientas.slapyvardis}"></span></p>
+    <p><strong>Rezervacijos pradžia:</strong> <span th:text="${reservation.pradzia}"></span></p>
+    <p><strong>Rezervacijos pabaiga:</strong> <span th:text="${reservation.pabaiga}"></span></p>
+    <button type="submit" style="background-color: red; color: white;">Ištrinti</button>
+    <a href="/reservations" class="cancel-link">Atšaukti</a>
+  </form>
+
 </body>
 </html>

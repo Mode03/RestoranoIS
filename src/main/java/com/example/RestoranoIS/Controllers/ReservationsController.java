@@ -49,29 +49,34 @@ public class ReservationsController {
         this.reservationService = reservationService;
         this.userService = userService;
     }
-    private List<Reservation> reservations = new ArrayList<>();
-    private int lastReservationId = 0;
+
+
 
     // Display all reservations
     @GetMapping("/reservations")
     public String showReservationsList(Model model) {
-        model.addAttribute("reservations", reservations);
+
+
+        model.addAttribute("reservations", reservationService.getAllReservations());
         return "Reservations/reservations-list";
     }
 
     // View a single reservation
-    /*@GetMapping("/reservations/view/{id}")
-    public String viewReservation(@PathVariable int id, Model model) {
-        Reservation reservation = findReservationById(id);
+    @GetMapping("/reservations/view/{id}")
+    public String viewReservation(@PathVariable("id") Integer id, Model model) {
+        // Fetch the reservation by ID
+        Reservation reservation = reservationService.getReservationById(id);
+
         if (reservation != null) {
             model.addAttribute("reservation", reservation);
-            return "Reservations/view-reservation";
+            return "Reservations/view-reservation"; // The Thymeleaf template to display
         } else {
-            model.addAttribute("info", "Reservation not found.");
+            model.addAttribute("info", "Rezervacija nerasta.");
             return "redirect:/reservations";
         }
     }
-    */
+
+
     // Show the form to create a new reservation
     @GetMapping("/reservations/create")
     public String showCreateReservationForm(Model model) {
@@ -93,7 +98,7 @@ public class ReservationsController {
                                     @RequestParam("pabaiga") LocalDateTime pabaiga,
                                     @RequestParam("zmoniuKiekis") Integer zmoniuKiekis,
                                     @RequestParam(value ="pageidavimas", required = false) String pageidavimas,
-                                    @RequestParam("staliuko_nr") Integer staliukas,
+                                    @RequestParam("staliukoNr") Integer staliukas,
                                     Model model, HttpSession session) {
 
         User loggedInUser = (User) session.getAttribute("loggedInUser");
@@ -144,34 +149,28 @@ public class ReservationsController {
             model.addAttribute("info", "Reservation not found.");
             return "redirect:/reservations";
         }
-    }
+    }*/
 
-    // Show delete confirmation page
-    @GetMapping("/reservations/delete/confirm/{id}")
-    public String showDeleteConfirmation(@PathVariable int id, Model model) {
-        Reservation reservation = findReservationById(id);
+
+    // Process the final deletion after confirmation
+    @GetMapping("/reservations/delete/{id}")
+    public String confirmDeleteReservation(@PathVariable("id") Integer id, Model model) {
+        Reservation reservation = reservationService.getReservationById(id);
         if (reservation != null) {
             model.addAttribute("reservation", reservation);
-            return "Reservations/delete-reservation";
+            return "Reservations/delete-reservation"; // Render the delete confirmation page
         } else {
-            model.addAttribute("info", "Reservation not found.");
+            model.addAttribute("info", "Nerasta rezervacija");
             return "redirect:/reservations";
         }
     }
 
-    // Process the final deletion after confirmation
-    @GetMapping("/reservations/delete/{id}")
-    public String confirmDeleteReservation(@PathVariable int id, Model model) {
-        reservations.removeIf(reservation -> reservation.getId() == id);
-        model.addAttribute("info", "Reservation deleted successfully.");
+    @PostMapping("/reservations/delete/{id}")
+    public String deleteReservation(@PathVariable("id") Integer id, Model model) {
+        reservationService.deleteReservationById(id);
+        model.addAttribute("info", "Rezervacija ištrinta sėkmingai");
         return "redirect:/reservations";
     }
 
-    // Helper method to find a reservation by ID
-    private Reservation findReservationById(int id) {
-        return reservations.stream()
-                .filter(reservation -> reservation.getId() == id)
-                .findFirst()
-                .orElse(null);
-    }*/
+
 }

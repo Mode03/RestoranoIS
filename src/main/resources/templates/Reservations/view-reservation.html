@@ -7,43 +7,25 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-<div th:insert="~{fragments/navbar}"></div>
-<h1>Rezervacijos informacija</h1>
-    <table >
-        <thead>
-        <tr>
-            <th>Rezervacijos Nr</th>
-            <th>Vardas-Pavardė</th>
-            <th>Rezervavimo data</th>
-            <th>Rezervuota žmonių</th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td th:text="${reservation.id}"></td>
-            <td th:text="${reservation.customerName}"></td>
-            <td th:text="${reservation.date}"></td>
-            <td th:text="${reservation.people}"></td>
-            <td>
-                <button th:onclick="|window.location='@{/reservations/edit/{id}(id=${reservation.id})}'|"
-                        style="border: 2px solid #04AA6D;" class="view-button">Redaguoti rezervaciją</button>
-            </td>
-            <td>
-                <button th:onclick="|window.location='@{/reservations/delete/confirm/{id}(id=${reservation.id})}'|"
-                        style="border: 2px solid #04AA6D;" class="view-button">Ištrinti rezervaciją</button>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+<div th:replace="~{fragments/navbar}"></div>
 
-        <!--<form th:action="@{/reservations/delete/{id}(id=${reservation.id})}" method="post" style="display: inline;">
-        //    <button type="submit" onclick="return confirm('Ištrinti rezervaciją?');">
-        //        Ištrinti rezervaciją
-        //   </button>
-        //</form> -->
+<div class="container">
+    <h1>Rezervacijos Peržiūra</h1>
+    <div class="order-details">
+        <p><strong>Klientas:</strong> <span th:text="${reservation.klientas.slapyvardis}"></span></p>
+        <p><strong>Rezervacijos Nr.:</strong> <span th:text="${reservation.rezervacija}"></span></p>
+        <p><strong>Rezervacijos pradžia:</strong> <span th:text="${reservation.pradzia}"></span></p>
+        <p><strong>Rezervacijos pabaiga:</strong> <span th:text="${reservation.pabaiga}"></span></p>
+        <p><strong>Staliukas:</strong> <span th:text="${reservation.staliukas.staliukas}"></span></p>
+        <p><strong>Žmonių:</strong> <span th:text="${reservation.zmoniuKiekis}"></span></p>
+        <p><strong>Pageidavimas:</strong> <span th:text="${reservation.pageidavimas}"></span></p>
+    </div>
+    <div class="center-actions">
+        <a th:href="@{/reservations/edit/{id}(id=${reservation.rezervacija})}">Redaguoti rezervaciją</a>
+        <a th:href="@{/reservations/delete/{id}(id=${reservation.rezervacija})}">Ištrinti rezervaciją</a>
+        <a href="/reservations">Grįžti</a>
+    </div>
+</div>
 
-
-    <a href="/reservations"><button>Gryžti į sarašą</button></a>
 </body>
 </html>

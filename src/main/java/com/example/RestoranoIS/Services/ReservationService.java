@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class ReservationService {
@@ -54,5 +55,15 @@ public class ReservationService {
     public void saveOrder(Reservation reservation) {
         // Užsakymo išsaugojimas duomenų bazėje
         reservationRepository.save(reservation);
+    }
+
+    public List<Reservation> getAllReservations() {
+        return reservationRepository.findAll();
+    }
+    public Reservation getReservationById(Integer id) {
+        return reservationRepository.findById(id).orElse(null);
+    }
+    public void deleteReservationById(Integer id) {
+        reservationRepository.deleteById(id);
     }
 }

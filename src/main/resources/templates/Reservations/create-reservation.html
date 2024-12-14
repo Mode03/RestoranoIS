@@ -15,13 +15,15 @@
         <label>Rezervacijos Pabaiga:</label><input type="datetime-local" name="pabaiga" th:field="*{pabaiga}" required/>
         <label>žmonių kiekis:</label><input type="number" name="zmoniuKiekis" th:field="*{zmoniuKiekis}" required/>
         <label>Pageidavimas:</label><input type="text" name="pageidavimas" th:field="*{pageidavimas}" />
-        <label for="staliuko_nr">Pasirinkite staliuką:</label>
-        <select id="staliuko_nr" name="staliuko_nr" required>
+        <label for="staliukoNr">Pasirinkite staliuką:</label>
+        <select id="staliukoNr" name="staliukoNr" required>
             <option value="" disabled selected>Pasirinkite staliuką</option>
-            <option th:each="table : ${staliukai}"
-                    th:value="${table.staliukas}"
-                    th:text="'Staliukas ' + ${table.staliukas} + ' - ' + ${table.vietuSkaicius} + ' vietos'"></option>
+            <th:block th:each="staliukas : ${staliukai}">
+                <option th:value="${staliukas.staliukas}"
+                        th:text="'Staliukas ' + ${staliukas.staliukas} + ' - ' + ${staliukas.vietuSkaicius} + ' vietos'"></option>
+            </th:block>
         </select>
+
 
         <button type="submit" style="background-color: #4CAF50; color: white;">Patvirtinti rezervaciją</button>
     </form>
