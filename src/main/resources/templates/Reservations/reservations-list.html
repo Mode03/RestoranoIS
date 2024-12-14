@@ -20,6 +20,7 @@
             <th>Rezervacijos pabaiga</th>
             <th>Žmonių kiekis</th>
             <th>Pagaidavimai</th>
+            <th>Staliukas</th>
             <th></th>
         </tr>
         </thead>
@@ -32,6 +33,7 @@
             <td th:text="${reservation.pabaiga}"></td>
             <td th:text="${reservation.zmoniusKiekis}"></td>
             <td th:text="${reservation.pageidavimas}"></td>
+            <td th:text="${reservation.staliukas}"></td>
             <td>
                 <button th:onclick="|window.location='@{/reservations/view/{id}(id=${reservation.id})}'|"
                         style="border: 2px solid #04AA6D;" class="view-button">Peržiūrėti</button>

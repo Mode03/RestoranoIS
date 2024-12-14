@@ -13,10 +13,10 @@
     <form th:action="@{/reservations/create/submit}" th:object="${reservation}" method="post">
         <label>Rezervacijos Pradzia:</label><input type="datetime-local" name="pradzia" th:field="*{pradzia}" required/>
         <label>Rezervacijos Pabaiga:</label><input type="datetime-local" name="pabaiga" th:field="*{pabaiga}" required/>
-        <label>žmonių kiekis:</label><input type="number" name="zmoniukiekis" th:field="*{zmoniuKiekis}" required/>
+        <label>žmonių kiekis:</label><input type="number" name="zmoniuKiekis" th:field="*{zmoniuKiekis}" required/>
         <label>Pageidavimas:</label><input type="text" name="pageidavimas" th:field="*{pageidavimas}" />
         <label for="staliuko_nr">Pasirinkite staliuką:</label>
-        <select id="staliuko_nr" name="staliukas" th:field="*{staliukas}" required>
+        <select id="staliuko_nr" name="staliuko_nr" required>
             <option value="" disabled selected>Pasirinkite staliuką</option>
             <option th:each="table : ${staliukai}"
                     th:value="${table.staliukas}"
