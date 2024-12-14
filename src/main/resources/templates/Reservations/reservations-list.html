@@ -14,18 +14,24 @@
         <thead>
         <tr>
             <th>Rezervacijos Nr</th>
-            <th>Vardas-Pavardė</th>
-            <th>Rezervavimo data</th>
-            <th>Rezervuota žmonių</th>
+            <th>Vardas</th>
+            <th>Pavarde</th>
+            <th>Rezervacijos pradzia</th>
+            <th>Rezervacijos pabaiga</th>
+            <th>Žmonių kiekis</th>
+            <th>Pagaidavimai</th>
             <th></th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="reservation : ${reservations}">
             <td th:text="${reservation.id}"></td>
-            <td th:text="${reservation.customerName}"></td>
-            <td th:text="${reservation.date}"></td>
-            <td th:text="${reservation.people}"></td>
+            <td th:text="${reservation.user.vardas}"></td>
+            <td th:text="${reservation.user.pavarde}"></td>
+            <td th:text="${reservation.pradzia}"></td>
+            <td th:text="${reservation.pabaiga}"></td>
+            <td th:text="${reservation.zmoniusKiekis}"></td>
+            <td th:text="${reservation.pageidavimas}"></td>
             <td>
                 <button th:onclick="|window.location='@{/reservations/view/{id}(id=${reservation.id})}'|"
                         style="border: 2px solid #04AA6D;" class="view-button">Peržiūrėti</button>
