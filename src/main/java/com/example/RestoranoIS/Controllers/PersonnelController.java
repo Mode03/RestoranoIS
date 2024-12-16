@@ -156,7 +156,7 @@ public class PersonnelController {
     @PostMapping("/personnel-list/create/submit")
     @Transactional
     public String submitCreatedPersonnel(@ModelAttribute("employee") Employee employee,
-                                         @RequestParam("selected") String selected,
+                                         @RequestParam(value = "selected", required = false) String selected,
                                          Model model, HttpSession session){
         User loggedInUser = (User) session.getAttribute("loggedInUser");
 
@@ -183,7 +183,7 @@ public class PersonnelController {
         employee.setIdNaudotojas(user.getId());
         employeeRepository.save(employee);
 
-        if(selected.equals("on")){
+        if(selected != null && selected.equals("on")){
             Administrator administrator = new Administrator(employee.getIdNaudotojas(), ADMIN_KEY);
             administratorRepository.save(administrator);
         }
@@ -285,7 +285,7 @@ public class PersonnelController {
     }
 
     @PostMapping("/personnel-list/salary/calculate")
-    public String getOrderForm(@RequestParam("selected") String selected, Model model, HttpSession session) {
+    public String getOrderForm(@RequestParam(value = "selected", required = false) String selected, Model model, HttpSession session) {
         User loggedInUser = (User) session.getAttribute("loggedInUser");
 
         if (loggedInUser == null) {
@@ -296,6 +296,13 @@ public class PersonnelController {
         boolean isAdmin = userService.isAdministrator(userId);
         if (!userService.isAdministrator(userId)) {
             return "redirect:/access-denied";
+        }
+
+        if(selected == null){
+            model.addAttribute("info", "Norint skaičiuoti algas, pasirinkite personalą");
+            List<Employee> employees = employeeRepository.findAll();
+            model.addAttribute("employees",employees);
+            return "Personnel/personnel-salary";
         }
 
         String[] split = selected.split(",");
