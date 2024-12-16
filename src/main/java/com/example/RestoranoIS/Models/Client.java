@@ -18,6 +18,7 @@ public class Client {
     @Column(name = "id_Naudotojas", nullable = false)
     private Integer idNaudotojas;
 
+
     @Column(name = "slapyvardis", nullable = false)
     private String slapyvardis;
 

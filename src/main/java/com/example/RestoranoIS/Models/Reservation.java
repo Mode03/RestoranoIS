@@ -1,20 +1,59 @@
 package com.example.RestoranoIS.Models;
 
+import jakarta.persistence.*;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 
+@Getter
+@Setter
+@Data
+@Entity
+@Table(name = "REZERVACIJOS")
 public class Reservation {
-    private Integer id;
-    public String customerName;
-    public LocalDate date;
-    public  int people;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Integer rezervacija;
 
-    public Reservation(int id, String customerName,LocalDate date, int people) {
-        this.id = id;
-        this.customerName = customerName;
-        this.date = date;
-        this.people = people;
+    @Column(name = "pradzia", nullable = false)
+    private LocalDateTime pradzia;
+
+    @Column(name = "pabaiga", nullable = false)
+    private LocalDateTime pabaiga;
+
+    @Column(name = "zmoniu_kiekis", nullable = false)
+    private Integer zmoniuKiekis;
+
+    @Column(name = "pageidavimas")
+    private String pageidavimas;
+
+    @ManyToOne
+    @JoinColumn(name = "fk_Klientas")
+    private Client klientas;
+
+    @ManyToOne
+    @JoinColumn(name = "fk_Staliukas")
+    private CustomerTable staliukas;
+
+    public Reservation(){
+
     }
 
+    public Reservation(Integer id, LocalDateTime pradzia,LocalDateTime pabaiga, Integer zmoniuKiekis,String pageidavimas,Client klientas,CustomerTable staliukas) {
+        this.rezervacija = id;
+        this.pradzia = pradzia;
+        this.pabaiga = pabaiga;
+        this.zmoniuKiekis = zmoniuKiekis;
+        this.pageidavimas = pageidavimas;
+        this.klientas = klientas;
+        this.staliukas = staliukas;
+    }
+/*
     public Reservation() {
 
     }
@@ -51,5 +90,5 @@ public class Reservation {
     public void setPeople(int people) {
         this.people = people;
     }
-
+*/
 }
