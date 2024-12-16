@@ -41,6 +41,15 @@
         </tr>
         </tbody>
     </table>
+    <div class="request-list">
+        <div th:each="form : ${acceptedForms}" class="request-item">
+            <spam th:text="${form.fkDarbuotojas.getUser().vardas + ' ' + form.fkDarbuotojas.getUser().pavarde}"></spam>
+            <span th:text="${form.getPradziosData()}"></span>
+            <span th:text="${form.getPabaigosData()}"></span>
+            <span th:text="${form.getPriezastis()}"></span>
+            <span th:text="${form.getStatusas()}"></span>
+        </div>
+    </div>
 
     <a th:href="@{/}" class="back-link">Atgal į pagrindinį puslapį</a>
 </div>

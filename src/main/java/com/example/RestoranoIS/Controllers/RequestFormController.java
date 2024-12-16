@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class RequestFormController {
@@ -81,9 +83,12 @@ public class RequestFormController {
         if (!userService.isAdministrator(loggedInUser.getId())) {
             return "redirect:/access-denied";
         }
-
+        Statusas priimti = Statusas.priimta;
         Statusas statusas = Statusas.laukiama;
+        List<RequestForm> acceptedForms = requestFormRepository.findAllByStatusasEquals(priimti);
         List<RequestForm> forms = requestFormRepository.findAllByStatusasEquals(statusas);
+        acceptedForms.sort(Comparator.comparing(RequestForm::getPradziosData).reversed());
+        model.addAttribute("acceptedForms", acceptedForms);
         model.addAttribute("forms", forms);
         return "WorkSchedule/day-request-review";
     }

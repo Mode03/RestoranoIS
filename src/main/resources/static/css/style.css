@@ -170,11 +170,3 @@ th {
 .form-button:hover {
     background-color: #45a049;
 }
-
-.form-button + button {
-    background-color: #f44336;
-}
-
-.form-button + button:hover {
-    background-color: #d32f2f;
-}
