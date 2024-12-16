@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.example.RestoranoIS.Services.OrderService;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -57,7 +58,7 @@ public class OrderController {
             model.addAttribute("orders", orders);
         } else {
             // Jei naudotojas nėra nei administratorius, nei klientas
-            return "redirect:/access-denied";
+            return "redirect:/main";
         }
 
         return "Orders/orders";
@@ -65,10 +66,9 @@ public class OrderController {
 
     @GetMapping("/create-order")
     public String showCreateOrderForm(Model model, HttpSession session) throws JsonProcessingException {
-        // Patikriname, ar vartotojas prisijungęs
         User loggedInUser = (User) session.getAttribute("loggedInUser");
         if (loggedInUser == null) {
-            return "redirect:/login"; // Peradresuojame, jei vartotojas neprisijungęs
+            return "redirect:/login";
         }
 
         // Patikriname, ar vartotojas yra administratorius
@@ -92,13 +92,10 @@ public class OrderController {
         List<Dish> dishes = orderService.getAllDishes();
         model.addAttribute("dishesJson", mapper.writeValueAsString(dishes));
 
-        // Perduodame duomenis į modelį ir formą
         model.addAttribute("paymentTypes", orderService.getAllPaymentTypes());
         model.addAttribute("orderStatuses", orderService.getAllOrderStatuses());
         model.addAttribute("orderTypes", orderService.getAllOrderTypes());
         model.addAttribute("dishes", orderService.getAllDishes());
-
-        System.out.println("AAAAAAAA");
 
         return "Orders/create-order";
     }
@@ -107,10 +104,10 @@ public class OrderController {
     public String createOrder(@RequestParam Integer paymentTypeId,
                               @RequestParam Integer orderTypeId,
                               @RequestParam(required = false) Integer clientId, // Pasirinktas kliento ID (tik administratoriui)
-                              @RequestParam List<Integer> dishIds, // Patiekalo ID sąrašas
-                              @RequestParam List<Integer> quantities, // Patiekalo kiekiai
+                              @RequestParam List<Integer> dishIds,
+                              @RequestParam List<Integer> quantities,
                               HttpSession session) {
-        // Patikriname, ar vartotojas prisijungęs
+
         User loggedInUser = (User) session.getAttribute("loggedInUser");
         if (loggedInUser == null) {
             return "redirect:/login";
@@ -152,7 +149,7 @@ public class OrderController {
         order.setBendraSuma(totalSum);
         orderService.saveOrder(order);
 
-        return "redirect:/orders"; // Nukreipiame į užsakymų sąrašą
+        return "redirect:/orders";
     }
 
     @GetMapping("/view-order")
@@ -160,7 +157,7 @@ public class OrderController {
         Order order = orderService.getOrderById(orderId);
         model.addAttribute("order", order);
         model.addAttribute("orderDishes", orderService.getOrderDishesByOrderId(orderId));
-        return "Orders/view-order"; // Sukurti HTML šabloną užsakymo peržiūrai
+        return "Orders/view-order";
     }
 
     @GetMapping("/edit-order")
@@ -187,16 +184,25 @@ public class OrderController {
                                    @RequestParam Integer statusTypeId,
                                    @RequestParam(required = false) List<Integer> dishIds,
                                    @RequestParam(required = false) List<Integer> quantities,
-                                   @RequestParam("date") String date) {
-        // Atnaujinti užsakymo informaciją
-        orderService.updateOrder(orderId, paymentTypeId, orderTypeId, statusTypeId, dishIds, quantities);
+                                   @RequestParam("date") String date,
+                                   RedirectAttributes redirectAttributes) {
+        try {
+            // Atnaujinti užsakymo informaciją
+            orderService.updateOrder(orderId, paymentTypeId, orderTypeId, statusTypeId, dishIds, quantities);
 
-        Order order = orderService.getOrderById(orderId);
-        order.setData(LocalDate.parse(date));
-        orderService.saveOrder(order);
+            Order order = orderService.getOrderById(orderId);
+            order.setData(LocalDate.parse(date));
+            orderService.saveOrder(order);
 
-        return "redirect:/orders";
+            redirectAttributes.addFlashAttribute("successMessage", "Užsakymas sėkmingai atnaujintas!");
+
+            return "redirect:/orders";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Klaida atnaujinant užsakymą: " + e.getMessage());
+            return "redirect:/orders";
+        }
     }
+
 
     @GetMapping("/delete-order")
     public String deleteOrder(@RequestParam("id") Integer orderId, Model model) {
@@ -208,12 +214,20 @@ public class OrderController {
         return "Orders/delete-order"; // Confirmation page
     }
     @PostMapping("/delete-order")
-    public String processDeleteOrder(@RequestParam("orderId") Integer orderId) {
-        // Pašalina užsakymą ir susijusius OrderDish įrašus
-        orderService.deleteOrder(orderId);
-        return "redirect:/orders"; // Nukreipia atgal į užsakymų sąrašą
+    public String processDeleteOrder(@RequestParam("orderId") Integer orderId, RedirectAttributes redirectAttributes) {
+        try {
+            // Patikrina, ar užsakymas gali būti ištrintas
+            if (orderService.canDeleteOrder(orderId)) {
+                orderService.deleteOrder(orderId);
+                redirectAttributes.addFlashAttribute("successMessage", "Užsakymas sėkmingai pašalintas.");
+            } else {
+                redirectAttributes.addFlashAttribute("errorMessage", "Užsakymo negalima pašalinti dėl jo būsenos.");
+            }
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Įvyko klaida šalinant užsakymą.");
+        }
+        return "redirect:/orders";
     }
-
 
     @GetMapping("/generate-report")
     public String showGenerateReportPage(Model model) {
@@ -234,7 +248,6 @@ public class OrderController {
         Map<String, Integer> dishSummary = orderService.getDishSummary(filteredOrders);
         double totalOrderSum = orderService.getTotalOrderSum(filteredOrders);
 
-        // Perduoti duomenis šablonui
         model.addAttribute("filteredOrders", filteredOrders);
         model.addAttribute("dishSummary", dishSummary);
         model.addAttribute("totalOrderSum", totalOrderSum);
