@@ -14,8 +14,8 @@
     <div class="order-details">
         <p><strong>Klientas:</strong> <span th:text="${reservation.klientas.slapyvardis}"></span></p>
         <p><strong>Rezervacijos Nr.:</strong> <span th:text="${reservation.rezervacija}"></span></p>
-        <p><strong>Rezervacijos pradžia:</strong> <span th:text="${reservation.pradzia}"></span></p>
-        <p><strong>Rezervacijos pabaiga:</strong> <span th:text="${reservation.pabaiga}"></span></p>
+        <p><strong>Rezervacijos pradžia:</strong> <span th:text="${#temporals.format(reservation.pradzia, 'yyyy-MM-dd HH:mm')}"></span></p>
+        <p><strong>Rezervacijos pabaiga:</strong> <span th:text="${#temporals.format(reservation.pabaiga, 'yyyy-MM-dd HH:mm')}"></span></p>
         <p><strong>Staliukas:</strong> <span th:text="${reservation.staliukas.staliukas}"></span></p>
         <p><strong>Žmonių:</strong> <span th:text="${reservation.zmoniuKiekis}"></span></p>
         <p><strong>Pageidavimas:</strong> <span th:text="${reservation.pageidavimas}"></span></p>

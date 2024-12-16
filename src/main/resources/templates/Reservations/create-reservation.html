@@ -10,23 +10,50 @@
 <div th:insert="~{fragments/navbar}"></div>
 <div >
     <h1>Nauja rezervacija</h1>
-    <form th:action="@{/reservations/create/submit}" th:object="${reservation}" method="post">
-        <label>Rezervacijos Pradzia:</label><input type="datetime-local" name="pradzia" th:field="*{pradzia}" required/>
-        <label>Rezervacijos Pabaiga:</label><input type="datetime-local" name="pabaiga" th:field="*{pabaiga}" required/>
-        <label>žmonių kiekis:</label><input type="number" name="zmoniuKiekis" th:field="*{zmoniuKiekis}" required/>
-        <label>Pageidavimas:</label><input type="text" name="pageidavimas" th:field="*{pageidavimas}" />
-        <label for="staliukoNr">Pasirinkite staliuką:</label>
-        <select id="staliukoNr" name="staliukoNr" required>
-            <option value="" disabled selected>Pasirinkite staliuką</option>
-            <th:block th:each="staliukas : ${staliukai}">
-                <option th:value="${staliukas.staliukas}"
-                        th:text="'Staliukas ' + ${staliukas.staliukas} + ' - ' + ${staliukas.vietuSkaicius} + ' vietos'"></option>
-            </th:block>
-        </select>
+    <form id="reservationForm" th:action="@{/reservations/create/submit}" th:object="${reservation}" method="post">
 
+        <!-- Error message block -->
+        <div th:if="${info}" style="color: red;">
+            <p th:text="${info}"></p>
+        </div>
 
-        <button type="submit" style="background-color: #4CAF50; color: white;">Patvirtinti rezervaciją</button>
+        <!-- Input fields -->
+        <label>Rezervacijos Pradzia:</label>
+        <input type="datetime-local" id="pradzia" name="pradzia" th:field="*{pradzia}" required />
+
+        <label>Rezervacijos Pabaiga:</label>
+        <input type="datetime-local" id="pabaiga" name="pabaiga" th:field="*{pabaiga}" required />
+
+        <label>Žmonių kiekis:</label>
+        <input type="number" id="zmoniuKiekis" name="zmoniuKiekis" th:field="*{zmoniuKiekis}" min="1" th:max="${staliukas.vietuSkaicius}" required />
+
+        <label>Pageidavimas:</label>
+        <input type="text" id="pageidavimas" name="pageidavimas" th:field="*{pageidavimas}" />
+
+        <button type="submit">Patvirtinti rezervaciją</button>
     </form>
+
+    <!-- JavaScript Validation -->
+    <script>
+        document.getElementById('reservationForm').addEventListener('submit', function (event) {
+            const pradzia = new Date(document.getElementById('pradzia').value);
+            const pabaiga = new Date(document.getElementById('pabaiga').value);
+
+            if (pradzia >= pabaiga) {
+                event.preventDefault(); // Prevent form submission
+                alert("Rezervacijos pabaiga turi būti vėlesnė už pradžią!");
+            }
+        });
+
+        document.getElementById('reservationForm').addEventListener('submit', function (event) {
+            const zmoniuKiekis = new Integer(document.getElementById('zmoniuKiekis').value);
+            if (zmoniuKiekis < 1) {
+                event.preventDefault(); // Prevent form submission
+                alert("Nenustatėte lauko "Žmonių Kiekis"!");
+            }
+        });
+
+    </script>
 
     <a th:href="@{/reservations}"><button>Atgal į sarašą</button></a>
 </div>

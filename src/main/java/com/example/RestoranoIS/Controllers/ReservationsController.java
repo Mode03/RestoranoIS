@@ -1,9 +1,6 @@
 package com.example.RestoranoIS.Controllers;
 
-import com.example.RestoranoIS.Models.Client;
-import com.example.RestoranoIS.Models.CustomerTable;
-import com.example.RestoranoIS.Models.Reservation;
-import com.example.RestoranoIS.Models.User;
+import com.example.RestoranoIS.Models.*;
 import com.example.RestoranoIS.Repositories.ClientRepository;
 import com.example.RestoranoIS.Repositories.CustomerTableRepository;
 import com.example.RestoranoIS.Repositories.ReservationRepository;
@@ -54,17 +51,46 @@ public class ReservationsController {
 
     // Display all reservations
     @GetMapping("/reservations")
-    public String showReservationsList(Model model) {
+    public String showReservationsList(Model model,HttpSession session) {
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
 
+        if (loggedInUser == null) {
+            return "redirect:/login";
+        }
 
-        model.addAttribute("reservations", reservationService.getAllReservations());
+        Integer userId = loggedInUser.getId();
+
+        boolean isAdmin = userService.isAdministrator(userId);
+        model.addAttribute("isAdmin", isAdmin);
+
+        // Patikriname, ar naudotojas yra administratorius
+        if (userService.isAdministrator(userId)) {
+            // Jei administratorius, rodomi visos rezervacijos
+            List<Reservation> reservations = reservationService.getAllReservations();
+            model.addAttribute("reservations", reservations);
+        } else if (userService.isClient(userId)) {
+            // Jei klientas, rodomi tik jo rezervacijos
+            List<Reservation> reservations = reservationService.getReservationsByClientId(userId);
+            model.addAttribute("reservations", reservations);
+        } else {
+            // Jei naudotojas nėra nei administratorius, nei klientas
+            return "redirect:/access-denied";
+        }
+
         return "Reservations/reservations-list";
     }
 
     // View a single reservation
     @GetMapping("/reservations/view/{id}")
-    public String viewReservation(@PathVariable("id") Integer id, Model model) {
+    public String viewReservation(@PathVariable("id") Integer id, Model model,HttpSession session) {
         // Fetch the reservation by ID
+
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+
+        if (loggedInUser == null) {
+            return "redirect:/login";
+        }
+
         Reservation reservation = reservationService.getReservationById(id);
 
         if (reservation != null) {
@@ -79,14 +105,21 @@ public class ReservationsController {
 
     // Show the form to create a new reservation
     @GetMapping("/reservations/create")
-    public String showCreateReservationForm(Model model) {
+    public String showCreateReservationForm(Model model,HttpSession session) {
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+
+        if (loggedInUser == null) {
+            return "redirect:/login";
+        }
+
         Reservation reservation = new Reservation();
         Client client = new Client();
-        List<CustomerTable> staliukai = customerTableRepository.findAll();
 
+
+        CustomerTable staliukas = reservationService.getBiggestCustomerTable();
         reservation.setKlientas(client);
         model.addAttribute("reservation", reservation);
-        model.addAttribute("staliukai", staliukai);
+        model.addAttribute("staliukas", staliukas);
         return "Reservations/create-reservation";
     }
 
@@ -98,58 +131,92 @@ public class ReservationsController {
                                     @RequestParam("pabaiga") LocalDateTime pabaiga,
                                     @RequestParam("zmoniuKiekis") Integer zmoniuKiekis,
                                     @RequestParam(value ="pageidavimas", required = false) String pageidavimas,
-                                    @RequestParam("staliukoNr") Integer staliukas,
                                     Model model, HttpSession session) {
 
         User loggedInUser = (User) session.getAttribute("loggedInUser");
-        Integer userId = loggedInUser.getId();
+        if (loggedInUser == null) {
+            return "redirect:/login"; // Ensure user is logged in
+        }
 
-        Client client ;
-        CustomerTable table;
-        client = userService.getClientByUserId(loggedInUser.getId());
-        table= reservationService.getCustomerTableById(staliukas);
-        Reservation reservation = reservationService.createReservation(pradzia,pabaiga,zmoniuKiekis,pageidavimas,client,table);
+        // Fetch the client linked to the logged-in user
+        Client client = userService.getClientByUserId(loggedInUser.getId());
 
-        reservationService.saveOrder(reservation);
-        //reservation.setKlientas(client.getIdNaudotojas());
-        //Reservation newReservation = new Reservation(lastReservationId++, customerName, date, people);
-        //reservations.add(newReservation);
-        //model.addAttribute("reservations", reservations);
+
+        // Calculate the optimal table based on availability and capacity
+        CustomerTable optimalTable = reservationService.findOptimalStaliukas(pradzia, pabaiga, zmoniuKiekis);
+        if (optimalTable == null) {
+            model.addAttribute("info", "Nėra laisvų staliukų pasirinktui laikui ir žmonių kiekiui!");
+            return "Reservations/create-reservation"; // Redirect back to form with error
+        }
+
+        // Create and save the reservation
+        Reservation reservation = reservationService.createReservation(pradzia, pabaiga, zmoniuKiekis, pageidavimas, client, optimalTable);
+        reservationService.saveReservation(reservation);
+
         return "redirect:/reservations";
     }
-/*
-    // Show the form to edit an existing reservation
+
     @GetMapping("/reservations/edit/{id}")
-    public String showEditReservationForm(@PathVariable int id, Model model) {
-        Reservation reservation = findReservationById(id);
+    public String showEditReservationForm(@PathVariable Integer id, Model model) {
+        // Fetch the reservation by ID
+        Reservation reservation = reservationService.getReservationById(id);
+
         if (reservation != null) {
             model.addAttribute("reservation", reservation);
+
+            // Fetch all tables for the dropdown
+            List<CustomerTable> staliukai = reservationService.getAllCustomerTables();
+            model.addAttribute("staliukai", staliukai);
+
             return "Reservations/edit-reservation";
         } else {
-            model.addAttribute("info", "Reservation not found.");
+            model.addAttribute("info", "Rezervacija nerasta.");
             return "redirect:/reservations";
         }
     }
 
+
     // Process the edit of a reservation
     @PostMapping("/reservations/edit/submit/{id}")
-    public String editReservation(@PathVariable int id,
-                                  @RequestParam("customerName") String customerName,
-                                  @RequestParam("date") String date,
-                                  @RequestParam("people") int people,
-                                  Model model) {
-        Reservation reservation = findReservationById(id);
-        if (reservation != null) {
-            reservation.setCustomerName(customerName);
-            reservation.setDate(date);
-            reservation.setPeople(people);
-            model.addAttribute("reservation", reservation);
+    public String editReservation(
+            @PathVariable Integer id,
+            @ModelAttribute Reservation reservation,
+            Model model) {
+
+        Reservation existingReservation = reservationService.getReservationById(id);
+
+        if (existingReservation != null) {
+            // Update the reservation fields
+            existingReservation.setPradzia(reservation.getPradzia());
+            existingReservation.setPabaiga(reservation.getPabaiga());
+            existingReservation.setZmoniuKiekis(reservation.getZmoniuKiekis());
+            existingReservation.setPageidavimas(reservation.getPageidavimas());
+
+            CustomerTable optimalTable = reservationService.findOptimalStaliukas(
+                    reservation.getPradzia(),
+                    reservation.getPabaiga(),
+                    reservation.getZmoniuKiekis(),
+                    reservation
+            );
+
+            if (optimalTable == null) {
+                // No suitable table available, show an error
+                model.addAttribute("info", "Nėra laisvų staliukų pasirinktui laikui ir žmonių kiekiui!");
+                return "Reservations/edit-reservation";
+            }
+
+            // Assign the optimal table
+            existingReservation.setStaliukas(optimalTable);
+
+            // Save the updated reservation
+            reservationService.saveReservation(existingReservation);
+
             return "redirect:/reservations/view/" + id;
         } else {
             model.addAttribute("info", "Reservation not found.");
             return "redirect:/reservations";
         }
-    }*/
+    }
 
 
     // Process the final deletion after confirmation

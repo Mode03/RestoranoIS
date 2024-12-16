@@ -10,4 +10,6 @@ import java.util.List;
 public interface ReservationRepository extends JpaRepository<Reservation,Integer> {
 
     List<Reservation> findAllByKlientasIdNaudotojas(Integer idNaudotojas);
+
+    List<Reservation> findByKlientas_idNaudotojas(Integer clientId);
 }

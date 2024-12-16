@@ -10,22 +10,59 @@
 <div th:insert="~{fragments/navbar}"></div>
 <h1>Rezervacijos informacijos redagavimas</h1>
 
-<form th:action="@{/reservations/edit/submit/{id}(id=${reservation.id})}" method="post">
+<form id="reservationForm" th:action="@{/reservations/edit/submit/{id}(id=${reservation.rezervacija})}"
+      th:object="${reservation}"
+      method="post">
     <div>
-        <label> Vardas-Pavardė: </label>
-        <input type="text" id="customerName" name="customerName" th:value="${reservation.customerName}" required>
 
-        <label>Data: </label>
-        <input type="date" id="date" name="date" th:value="${reservation.date}" required>
+        <div th:if="${info}" style="color: red;">
+            <p th:text="${info}"></p>
+        </div>
 
-        <label>Žmonių skaičius: </label>
-        <input type="number" id="people" name="people" th:value="${reservation.people}" min="1" required>
+        <label for="pradzia">  Rezervacijos Pradžia: </label>
+        <input type="datetime-local" id="pradzia" name="pradzia" th:value="*{pradzia}" required>
+
+        <label for="pabaiga">  Rezervacijos Pabaiga: </label>
+        <input type="datetime-local" id="pabaiga" name="pabaiga" th:value="*{pabaiga}" required>
+
+        <label for="zmoniuKiekis">  Žmonių kiekis: </label>
+        <input type="number" id="zmoniuKiekis" name="zmoniuKiekis" th:value="*{zmoniuKiekis}" min="1" required>
+
+        <label for="pageidavimas">  Pageidavimas: </label>
+        <input type="text" id="pageidavimas" name="pageidavimas" th:value="*{pageidavimas}" >
+
 
         <button type="submit">Išsaugoti pakeitimus</button>
-
-        <button th:href="@{/reservations/view/{id}(id=${reservation.id})}">Atšaukti redagavimą</button>
+        <button th:href="@{/reservations/view/{id}(id=${reservation.rezervacija})}">Atšaukti redagavimą</button>
     </div>
 </form>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('reservationForm');
+        form.addEventListener('submit', function (event) {
+            const pradzia = new Date(document.getElementById('pradzia').value);
+            const pabaiga = new Date(document.getElementById('pabaiga').value);
+
+            if (pradzia >= pabaiga) {
+                event.preventDefault(); // Prevent form submission
+                alert("Rezervacijos pabaiga turi būti vėlesnė už pradžią!");
+            }
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('reservationForm');
+        form.addEventListener('submit', function (event) {
+            const zmoniuKiekis = new Integer(document.getElementById('zmoniuKiekis').value);
+            if (zmoniuKiekis < 1) {
+                event.preventDefault(); // Prevent form submission
+                alert("Nenustatėte lauko "Žmonių Kiekis"!");
+            }
+        });
+    });
+
+</script>
 
 </body>
 </html>
