@@ -214,7 +214,8 @@ public class ReservationsController {
             // Fetch all tables for the dropdown
             List<CustomerTable> staliukai = reservationService.getAllCustomerTables();
             model.addAttribute("staliukai", staliukai);
-
+            CustomerTable staliukas = reservationService.getBiggestCustomerTable();
+            model.addAttribute("staliukas", staliukas);
             return "Reservations/edit-reservation";
         } else {
             model.addAttribute("info", "Rezervacija nerasta.");
@@ -234,10 +235,6 @@ public class ReservationsController {
 
         if (existingReservation != null) {
             // Update the reservation fields
-            existingReservation.setPradzia(reservation.getPradzia());
-            existingReservation.setPabaiga(reservation.getPabaiga());
-            existingReservation.setZmoniuKiekis(reservation.getZmoniuKiekis());
-            existingReservation.setPageidavimas(reservation.getPageidavimas());
 
             CustomerTable optimalTable = reservationService.findOptimalStaliukas(
                     reservation.getPradzia(),
@@ -249,8 +246,20 @@ public class ReservationsController {
             if (optimalTable == null) {
                 // No suitable table available, show an error
                 model.addAttribute("info", "Nėra laisvų staliukų pasirinktui laikui ir žmonių kiekiui!");
+                model.addAttribute("reservation", existingReservation);
+
+                // Fetch all tables for the dropdown
+                List<CustomerTable> staliukai = reservationService.getAllCustomerTables();
+                model.addAttribute("staliukai", staliukai);
+                CustomerTable staliukas = reservationService.getBiggestCustomerTable();
+                model.addAttribute("staliukas", staliukas);
                 return "Reservations/edit-reservation";
             }
+
+            existingReservation.setPradzia(reservation.getPradzia());
+            existingReservation.setPabaiga(reservation.getPabaiga());
+            existingReservation.setZmoniuKiekis(reservation.getZmoniuKiekis());
+            existingReservation.setPageidavimas(reservation.getPageidavimas());
 
             // Assign the optimal table
             existingReservation.setStaliukas(optimalTable);
