@@ -9,6 +9,13 @@
 <!-- Navigation bar -->
 <div th:insert="~{fragments/navbar}"></div>
 
+<div th:if="${successMessage}" class="alert alert-success" role="alert">
+    <span th:text="${successMessage}"></span>
+</div>
+<div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+    <span th:text="${errorMessage}"></span>
+</div>
+
 <h2>Užsakymų Sąrašas</h2>
 
 <table>

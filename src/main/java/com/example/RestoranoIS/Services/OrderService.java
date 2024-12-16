@@ -191,4 +191,13 @@ public class OrderService {
                 .orElseThrow(() -> new IllegalArgumentException("Invalid dish ID"));
     }
 
+    public boolean canDeleteOrder(Integer orderId) {
+        Order order = orderRepository.findById(orderId).orElse(null);
+        if (order == null) {
+            return false;
+        }
+
+        return !order.getStatusType().getName().equalsIgnoreCase("pabaigta");
+    }
+
 }
