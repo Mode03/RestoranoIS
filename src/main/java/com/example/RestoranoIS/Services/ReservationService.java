@@ -104,7 +104,7 @@ public class ReservationService {
         return availableTables.stream()
                 .filter(table -> table.getVietuSkaicius() >= zmoniuKiekis)
                 .min(Comparator.comparingInt(CustomerTable::getVietuSkaicius)) // Find the smallest table
-                .orElseThrow(() -> new RuntimeException("No suitable table available"));
+                .orElse(null);
     }
     public CustomerTable findOptimalStaliukas(LocalDateTime pradzia, LocalDateTime pabaiga, int zmoniuKiekis,Reservation currentReservation) {
 
@@ -128,7 +128,7 @@ public class ReservationService {
         return availableTables.stream()
                 .filter(table -> table.getVietuSkaicius() >= zmoniuKiekis)
                 .min(Comparator.comparingInt(CustomerTable::getVietuSkaicius)) // Find the smallest table
-                .orElseThrow(() -> new RuntimeException("No suitable table available"));
+                .orElse(null);
         //() -> new RuntimeException("No suitable table available")
     }
 
