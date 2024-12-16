@@ -28,13 +28,13 @@
             <td th:text="${form.pabaigosData}">Pabaigos Data</td>
             <td th:text="${form.priezastis}">Priežastis</td>
             <td>
-                <form th:action="@{/day-request/accept}" method="post" style="display:inline;">
+                <form th:action="@{/day-request/accept}" method="post">
                     <input type="hidden" name="formId" th:value="${form.id}"/>
-                    <button type="submit" class="accept-button">Priimti</button>
+                    <button type="submit" class="form-button">Priimti</button>
                 </form>
-                <form th:action="@{/day-request/reject}" method="post" style="display:inline;">
+                <form th:action="@{/day-request/reject}" method="post">
                     <input type="hidden" name="formId" th:value="${form.id}"/>
-                    <button type="submit" class="reject-button">Atmesti</button>
+                    <button type="submit" class="form-button">Atmesti</button>
 
                 </form>
             </td>

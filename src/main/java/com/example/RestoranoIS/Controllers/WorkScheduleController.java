@@ -57,16 +57,21 @@ public class WorkScheduleController {
             return "redirect:/login";
         }
         Integer userId = loggedInUser.getId();
+        boolean isEmployee = userService.isEmployee(loggedInUser.getId());
         boolean isAdmin = userService.isAdministrator(userId);
+        model.addAttribute("isEmployee", isEmployee);
         model.addAttribute("isAdmin", isAdmin);
         model.addAttribute("workSchedules", workSchedules);
         return "WorkSchedule/work-schedule";
     }
 
     @GetMapping("/work-schedule/week/{id}")
-    public String showDetailedSchedule(@PathVariable Long id, Model model) {
+    public String showDetailedSchedule(@PathVariable Long id, Model model, HttpSession session) {
         List<WorkScheduleDTO> scheduleDetails = workScheduleService.getWeekSchedule(id);
-
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            return "redirect:/login";
+        }
 
         model.addAttribute("id", id);
         model.addAttribute("scheduleDetails", scheduleDetails);
@@ -75,7 +80,11 @@ public class WorkScheduleController {
 
 
     @GetMapping("/work-schedule/week/{id}/edit")
-    public String editSchedule(@PathVariable Long id, Model model) {
+    public String editSchedule(@PathVariable Long id, Model model, HttpSession session) {
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            return "redirect:/login";
+        }
         List<WorkScheduleDTO> scheduleDetails = workScheduleService.getWeekSchedule(id);
         List<User> eUsers = userRepository.findAll();
         List<Employee> employees = employeeRepository.findAll();
@@ -137,9 +146,12 @@ public class WorkScheduleController {
 
 
     @GetMapping("/work-schedule/week/{weekNumber}/remove")
-    public String removeSchedule(@PathVariable int weekNumber,Model model) {
+    public String removeSchedule(@PathVariable int weekNumber,Model model,HttpSession session) {
         Optional<WorkSchedule> entry = workScheduleRepository.findById(weekNumber);
-
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            return "redirect:/login";
+        }
         if(entry.isEmpty()) throw new IllegalArgumentException("schedule not found: " + weekNumber);
         WorkSchedule schedule = entry.get();
         LocalDate endDate = schedule.getSavaitesPabaigosData().toLocalDate();

@@ -74,6 +74,9 @@ public class RequestFormController {
     @GetMapping("/day-request-review")
     public String showDayRequestReviewPage(Model model, HttpSession session) {
         User loggedInUser = (User) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            return "redirect:/login";
+        }
         boolean isAdmin = userService.isAdministrator(loggedInUser.getId());
         if (!userService.isAdministrator(loggedInUser.getId())) {
             return "redirect:/access-denied";
