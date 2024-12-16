@@ -38,31 +38,39 @@
 </form>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const form = document.getElementById('reservationForm');
-        form.addEventListener('submit', function (event) {
-            const pradzia = new Date(document.getElementById('pradzia').value);
-            const pabaiga = new Date(document.getElementById('pabaiga').value);
+    // Add event listener to update "pabaiga" max value when "pradzia" changes
+    document.getElementById('pradzia').addEventListener('change', function () {
+        const pradzia = new Date(this.value);
 
-            if (pradzia >= pabaiga) {
-                event.preventDefault(); // Prevent form submission
-                alert("Rezervacijos pabaiga turi būti vėlesnė už pradžią!");
-            }
-        });
+        // Calculate the end of the day for "pradzia"
+        const endOfDay = new Date(pradzia);
+        endOfDay.setHours(23, 59, 59, 999);
+
+        // Set the max attribute of the "pabaiga" field
+        const pabaigaInput = document.getElementById('pabaiga');
+        pabaigaInput.max = endOfDay.toISOString().slice(0, 16); // Convert to 'YYYY-MM-DDTHH:mm'
     });
 
-    document.addEventListener('DOMContentLoaded', function () {
-        const form = document.getElementById('reservationForm');
-        form.addEventListener('submit', function (event) {
-            const zmoniuKiekis = new Integer(document.getElementById('zmoniuKiekis').value);
-            if (zmoniuKiekis < 1) {
-                event.preventDefault(); // Prevent form submission
-                alert("Nenustatėte lauko "Žmonių Kiekis"!");
-            }
-        });
-    });
+    // Validate on form submission
+    document.getElementById('reservationForm').addEventListener('submit', function (event) {
+        const pradzia = new Date(document.getElementById('pradzia').value);
+        const pabaiga = new Date(document.getElementById('pabaiga').value);
 
+        if (pradzia >= pabaiga) {
+            event.preventDefault();
+            alert("Rezervacijos pabaiga turi būti vėlesnė už pradžią!");
+        }
+
+        const endOfDay = new Date(pradzia);
+        endOfDay.setHours(23, 59, 59, 999);
+
+        if (pabaiga > endOfDay) {
+            event.preventDefault();
+            alert("Rezervacijos pabaiga negali būti vėlesnė už tos pačios dienos pabaigą!");
+        }
+    });
 </script>
+
 
 </body>
 </html>
