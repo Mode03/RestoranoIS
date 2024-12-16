@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 
 @Controller
@@ -50,6 +51,7 @@ public class RequestFormController {
         model.addAttribute("loggedInUser", loggedInUser);
         Employee employee = employeeRepository.findByIdNaudotojas(loggedInUser.getId());
         List<RequestForm> requestForms = requestFormRepository.findAllByFkDarbuotojas(employee);
+        requestForms.sort(Comparator.comparing(RequestForm::getPradziosData).reversed());
         model.addAttribute("requestForms", requestForms);
         return "WorkSchedule/day-request";
     }

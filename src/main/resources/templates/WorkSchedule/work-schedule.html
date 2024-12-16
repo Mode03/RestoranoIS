@@ -24,13 +24,14 @@
                 th:data-url="@{'/work-schedule/week/' + ${workSchedule.id}}"
                 onclick="window.location.href=this.getAttribute('data-url')">Peržiūrėti</button>
         <button type="button" class="view-button"
+                th:if="${isAdmin}"
                 th:data-url="@{'/work-schedule/week/' + ${workSchedule.id} + '/edit'}"
                 onclick="window.location.href=this.getAttribute('data-url')">Redaguoti</button>
-        <button th:onclick="'confirmRemove(' + ${workSchedule.id} + ')'" class="view-button">Šalinti</button>
+        <button th:onclick="'confirmRemove(' + ${workSchedule.id} + ')'" th:if="${isAdmin}"  class="view-button">Šalinti</button>
     </div>
 
     <form action="/work-schedule/week/generate" method="post">
-        <button type="submit">Generuoti Savaitės grafiką</button>
+        <button type="submit" th:if="${isAdmin}">Generuoti Savaitės grafiką</button>
         <a href="/" class="cancel-link">Grįžti atgal</a>
     </form>
 </div>

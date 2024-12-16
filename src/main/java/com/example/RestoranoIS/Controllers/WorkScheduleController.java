@@ -8,6 +8,7 @@ import com.example.RestoranoIS.Services.WorkScheduleService;
 import jakarta.servlet.http.HttpSession;
 import org.hibernate.jdbc.Work;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.swing.text.html.Option;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -135,10 +137,18 @@ public class WorkScheduleController {
 
 
     @GetMapping("/work-schedule/week/{weekNumber}/remove")
-    public String removeSchedule(@PathVariable int weekNumber) {
+    public String removeSchedule(@PathVariable int weekNumber,Model model) {
         Optional<WorkSchedule> entry = workScheduleRepository.findById(weekNumber);
+
         if(entry.isEmpty()) throw new IllegalArgumentException("schedule not found: " + weekNumber);
         WorkSchedule schedule = entry.get();
+        LocalDate endDate = schedule.getSavaitesPabaigosData().toLocalDate();
+        LocalDate startDate = schedule.getSavaitesPradziosData().toLocalDate();
+        System.out.println(LocalDate.now() + " " + startDate + " " +endDate);
+        if (endDate.isAfter(LocalDate.now()) && startDate.isBefore(LocalDate.now())) {
+            return "WorkSchedule/work-schedule-error";
+        }
+
         List<WorkScheduleEntry> workScheduleEntries = workScheduleEntryRepository.findByFkDarboGrafikas_Id(weekNumber);
 
         workScheduleRepository.deleteWorkScheduleEntries(weekNumber);

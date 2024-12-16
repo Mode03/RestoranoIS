@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Redaguoti Darbo Grafiką - Savaitė</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script>
+        function disableTyping(e) {
+            e.preventDefault();
+        }
+    </script>
 </head>
 <body>
 <div th:insert="~{fragments/navbar}"></div>
@@ -43,13 +48,15 @@
                     <input type="hidden" name="startTimeDate"
                            th:value="${detail.startTime != null ? #temporals.format(detail.startTime, 'yyyy-MM-dd') : ''}" />
                     <input type="time" name="startTimeTime"
-                           th:value="${detail.startTime != null ? #temporals.format(detail.startTime, 'HH:mm') : ''}" />
+                           th:value="${detail.startTime != null ? #temporals.format(detail.startTime, 'HH:mm') : ''}"
+                           onkeydown="disableTyping(event)"/>
                 </td>
                 <td>
                     <input type="hidden" name="endTimeDate"
                            th:value="${detail.endTime != null ? #temporals.format(detail.endTime, 'yyyy-MM-dd') : ''}" />
                     <input type="time" name="endTimeTime"
-                           th:value="${detail.endTime != null ? #temporals.format(detail.endTime, 'HH:mm') : ''}" />
+                           th:value="${detail.endTime != null ? #temporals.format(detail.endTime, 'HH:mm') : ''}"
+                           onkeydown="disableTyping(event)" />
                 </td>
             </tr>
             </tbody>
