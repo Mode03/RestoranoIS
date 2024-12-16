@@ -113,11 +113,25 @@ public class ReservationsController {
         }
 
         Reservation reservation = new Reservation();
-        Client client = new Client();
 
+        boolean isAdmin = userService.isAdministrator(loggedInUser.getId());
+        model.addAttribute("isAdmin", isAdmin);
+
+        if (isAdmin) {
+            // Jei administratorius, perduodame visus klientus pasirinkimui
+            List<Client> clients = userService.getAllClients();
+            model.addAttribute("clients", clients);
+        } else {
+            // Jei klientas, pridedame tik jo informaciją
+            Client client = userService.getClientByUserId(loggedInUser.getId());
+            if (client == null) {
+                client = new Client(loggedInUser.getId(), loggedInUser.getVardas());
+            }
+            model.addAttribute("client", client);
+        }
 
         CustomerTable staliukas = reservationService.getBiggestCustomerTable();
-        reservation.setKlientas(client);
+
         model.addAttribute("reservation", reservation);
         model.addAttribute("staliukas", staliukas);
         return "Reservations/create-reservation";
@@ -131,21 +145,54 @@ public class ReservationsController {
                                     @RequestParam("pabaiga") LocalDateTime pabaiga,
                                     @RequestParam("zmoniuKiekis") Integer zmoniuKiekis,
                                     @RequestParam(value ="pageidavimas", required = false) String pageidavimas,
-                                    Model model, HttpSession session) {
+                                    Model model, HttpSession session,
+                                    @RequestParam(required = false) Integer clientId) {
 
         User loggedInUser = (User) session.getAttribute("loggedInUser");
         if (loggedInUser == null) {
             return "redirect:/login"; // Ensure user is logged in
         }
 
-        // Fetch the client linked to the logged-in user
-        Client client = userService.getClientByUserId(loggedInUser.getId());
+        Client client;
+        if (userService.isAdministrator(loggedInUser.getId()) && clientId != null) {
+            // Administratorius pasirinko klientą
+            client = userService.getClientByUserId(clientId);
+            if (client == null) {
+                throw new IllegalArgumentException("Pasirinktas klientas neegzistuoja.");
+            }
+        } else {
+            // Klientas kuria užsakymą pats
+            client = userService.getClientByUserId(loggedInUser.getId());
+            if (client == null) {
+                client = new Client(loggedInUser.getId(), loggedInUser.getVardas());
+            }
+        }
 
-
-        // Calculate the optimal table based on availability and capacity
         CustomerTable optimalTable = reservationService.findOptimalStaliukas(pradzia, pabaiga, zmoniuKiekis);
         if (optimalTable == null) {
             model.addAttribute("info", "Nėra laisvų staliukų pasirinktui laikui ir žmonių kiekiui!");
+            Reservation reservation = new Reservation();
+
+            boolean isAdmin = userService.isAdministrator(loggedInUser.getId());
+            model.addAttribute("isAdmin", isAdmin);
+
+            if (isAdmin) {
+                // Jei administratorius, perduodame visus klientus pasirinkimui
+                List<Client> clients = userService.getAllClients();
+                model.addAttribute("clients", clients);
+            } else {
+                // Jei klientas, pridedame tik jo informaciją
+                client = userService.getClientByUserId(loggedInUser.getId());
+                if (client == null) {
+                    client = new Client(loggedInUser.getId(), loggedInUser.getVardas());
+                }
+                model.addAttribute("client", client);
+            }
+
+            CustomerTable staliukas = reservationService.getBiggestCustomerTable();
+
+            model.addAttribute("reservation", reservation);
+            model.addAttribute("staliukas", staliukas);
             return "Reservations/create-reservation"; // Redirect back to form with error
         }
 
